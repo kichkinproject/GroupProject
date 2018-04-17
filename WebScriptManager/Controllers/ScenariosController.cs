@@ -12,13 +12,10 @@ namespace WebScriptManager.Controllers
 {
     public class ScenariosController : Controller
     {
-        private ScriptModelContainer1 db = new ScriptModelContainer1();
-        private AdminRepository adRep = AdminRepository.GetRepository();
-        private ScenarioRepository scRep = ScenarioRepository.GetRepository();
         // GET: Scenarios
         public ActionResult Index()
         {
-            return View(db.ScenarioSet.ToList());
+            return View(ContainerSingleton.GetContainer().ScenarioSet.ToList());
         }
 
         // GET: Scenarios/Details/5
@@ -28,7 +25,7 @@ namespace WebScriptManager.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Scenario scenario = db.ScenarioSet.Find(id);
+            Scenario scenario = ContainerSingleton.ScenarioRepository[(long)id];
             if (scenario == null)
             {
                 return HttpNotFound();
@@ -51,8 +48,8 @@ namespace WebScriptManager.Controllers
         {
             if (ModelState.IsValid)
             {
-                Admin me = adRep["system_author"];
-                scRep.AddScenario(scenario.Name, scenario.ScriptFile, scenario.Access, _description: scenario.Description, _admin: me);
+                Admin me = ContainerSingleton.AdminRepository["system_author"];
+                ContainerSingleton.ScenarioRepository.AddScenario(scenario.Name, scenario.ScriptFile, scenario.Access, _description: scenario.Description, _admin: me);
                 return RedirectToAction("Index");
             }
 
@@ -66,7 +63,7 @@ namespace WebScriptManager.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Scenario scenario = db.ScenarioSet.Find(id);
+            Scenario scenario = ContainerSingleton.ScenarioRepository[(long)id];
             if (scenario == null)
             {
                 return HttpNotFound();
@@ -83,8 +80,8 @@ namespace WebScriptManager.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Entry(scenario).State = System.Data.Entity.EntityState.Modified;
-                db.SaveChanges();
+                //db.Entry(scenario).State = System.Data.Entity.EntityState.Modified;
+                //db.SaveChanges();
                 return RedirectToAction("Index");
             }
             return View(scenario);
@@ -97,7 +94,7 @@ namespace WebScriptManager.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Scenario scenario = db.ScenarioSet.Find(id);
+            Scenario scenario = ContainerSingleton.ScenarioRepository[(long)id];
             if (scenario == null)
             {
                 return HttpNotFound();
@@ -110,9 +107,9 @@ namespace WebScriptManager.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(long id)
         {
-            Scenario scenario = db.ScenarioSet.Find(id);
-            db.ScenarioSet.Remove(scenario);
-            db.SaveChanges();
+            //Scenario scenario = db.ScenarioSet.Find(id);
+            //db.ScenarioSet.Remove(scenario);
+            //db.SaveChanges();
             return RedirectToAction("Index");
         }
 
@@ -120,7 +117,7 @@ namespace WebScriptManager.Controllers
         {
             if (disposing)
             {
-                db.Dispose();
+                //db.Dispose();
             }
             base.Dispose(disposing);
         }
