@@ -1,0 +1,315 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="ScriptModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" annotation:UseStrongSpatialTypes="false">
+  <EntityContainer Name="ScriptModelContainer1" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="AdminSet" EntityType="ScriptModel.Admin" />
+    <EntitySet Name="UserSet" EntityType="ScriptModel.User" />
+    <EntitySet Name="ScenarioSet" EntityType="ScriptModel.Scenario" />
+    <AssociationSet Name="AdminScenario" Association="ScriptModel.AdminScenario">
+      <End Role="Admin" EntitySet="AdminSet" />
+      <End Role="Scenario" EntitySet="ScenarioSet" />
+    </AssociationSet>
+    <AssociationSet Name="UserScenario" Association="ScriptModel.UserScenario">
+      <End Role="User" EntitySet="UserSet" />
+      <End Role="Scenario" EntitySet="ScenarioSet" />
+    </AssociationSet>
+    <EntitySet Name="UserGroupSet" EntityType="ScriptModel.UserGroup" />
+    <AssociationSet Name="UserGroupUser" Association="ScriptModel.UserGroupUser">
+      <End Role="UserGroup" EntitySet="UserGroupSet" />
+      <End Role="User" EntitySet="UserSet" />
+    </AssociationSet>
+    <EntitySet Name="SensorTypeSet" EntityType="ScriptModel.SensorType" />
+    <AssociationSet Name="ScenarioSensorType" Association="ScriptModel.ScenarioSensorType">
+      <End Role="Scenario" EntitySet="ScenarioSet" />
+      <End Role="SensorType" EntitySet="SensorTypeSet" />
+    </AssociationSet>
+    <EntitySet Name="SmartThingTypeSet" EntityType="ScriptModel.SmartThingType" />
+    <AssociationSet Name="ScenarioSmartThingType" Association="ScriptModel.ScenarioSmartThingType">
+      <End Role="Scenario" EntitySet="ScenarioSet" />
+      <End Role="SmartThingType" EntitySet="SmartThingTypeSet" />
+    </AssociationSet>
+    <EntitySet Name="SmartThingTypeDictionarySet" EntityType="ScriptModel.SmartThingTypeDictionary" />
+    <AssociationSet Name="SmartThingTypeSmartThingTypeDictionary" Association="ScriptModel.SmartThingTypeSmartThingTypeDictionary">
+      <End Role="SmartThingType" EntitySet="SmartThingTypeSet" />
+      <End Role="SmartThingTypeDictionary" EntitySet="SmartThingTypeDictionarySet" />
+    </AssociationSet>
+    <EntitySet Name="SmartPlaceSet" EntityType="ScriptModel.SmartPlace" />
+    <AssociationSet Name="UserGroupUserGroup" Association="ScriptModel.UserGroupUserGroup">
+      <End Role="UserGroup" EntitySet="UserGroupSet" />
+      <End Role="UserGroup1" EntitySet="UserGroupSet" />
+    </AssociationSet>
+    <EntitySet Name="SensorSet" EntityType="ScriptModel.Sensor" />
+    <EntitySet Name="SmartThingSet" EntityType="ScriptModel.SmartThing" />
+    <AssociationSet Name="SensorTypeSensor" Association="ScriptModel.SensorTypeSensor">
+      <End Role="SensorType" EntitySet="SensorTypeSet" />
+      <End Role="Sensor" EntitySet="SensorSet" />
+    </AssociationSet>
+    <AssociationSet Name="SmartThingTypeSmartThing" Association="ScriptModel.SmartThingTypeSmartThing">
+      <End Role="SmartThingType" EntitySet="SmartThingTypeSet" />
+      <End Role="SmartThing" EntitySet="SmartThingSet" />
+    </AssociationSet>
+    <EntitySet Name="ControlBoxSet" EntityType="ScriptModel.ControlBox" />
+    <EntitySet Name="LicenceDictionarySet" EntityType="ScriptModel.LicenceDictionary" />
+    <AssociationSet Name="UserGroupSmartPlace" Association="ScriptModel.UserGroupSmartPlace">
+      <End Role="UserGroup" EntitySet="UserGroupSet" />
+      <End Role="SmartPlace" EntitySet="SmartPlaceSet" />
+    </AssociationSet>
+    <AssociationSet Name="UserGroupControlBox" Association="ScriptModel.UserGroupControlBox">
+      <End Role="UserGroup" EntitySet="UserGroupSet" />
+      <End Role="ControlBox" EntitySet="ControlBoxSet" />
+    </AssociationSet>
+    <AssociationSet Name="SmartPlaceSensor" Association="ScriptModel.SmartPlaceSensor">
+      <End Role="SmartPlace" EntitySet="SmartPlaceSet" />
+      <End Role="Sensor" EntitySet="SensorSet" />
+    </AssociationSet>
+    <AssociationSet Name="ControlBoxSensor" Association="ScriptModel.ControlBoxSensor">
+      <End Role="ControlBox" EntitySet="ControlBoxSet" />
+      <End Role="Sensor" EntitySet="SensorSet" />
+    </AssociationSet>
+    <AssociationSet Name="ControlBoxSmartThing" Association="ScriptModel.ControlBoxSmartThing">
+      <End Role="ControlBox" EntitySet="ControlBoxSet" />
+      <End Role="SmartThing" EntitySet="SmartThingSet" />
+    </AssociationSet>
+    <AssociationSet Name="SmartPlaceSmartThing" Association="ScriptModel.SmartPlaceSmartThing">
+      <End Role="SmartPlace" EntitySet="SmartPlaceSet" />
+      <End Role="SmartThing" EntitySet="SmartThingSet" />
+    </AssociationSet>
+    <AssociationSet Name="ScenarioControlBox" Association="ScriptModel.ScenarioControlBox">
+      <End Role="Scenario" EntitySet="ScenarioSet" />
+      <End Role="ControlBox" EntitySet="ControlBoxSet" />
+    </AssociationSet>
+  </EntityContainer>
+  <EnumType Name="Licence">
+    <Member Name="None" />
+    <Member Name="PersonalFree" />
+    <Member Name="PersonalSimple" />
+    <Member Name="CompanySimple" />
+    <Member Name="PersonalMiddle" />
+    <Member Name="CompanyMiddle" />
+    <Member Name="PersonalFull" />
+    <Member Name="CompanyFull" />
+  </EnumType>
+  <EnumType Name="Modificator">
+    <Member Name="Local" />
+    <Member Name="Global" />
+  </EnumType>
+  <EnumType Name="Switch">
+    <Member Name="TurnedOn" />
+    <Member Name="TurnedOff" />
+  </EnumType>
+  <EnumType Name="UserType">
+    <Member Name="Simple" />
+    <Member Name="Integrator" />
+  </EnumType>
+  <EntityType Name="Admin">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Login" Type="String" Nullable="false" />
+    <Property Name="Password" Type="String" Nullable="false" />
+    <Property Name="FIO" Type="String" Nullable="false" />
+    <Property Name="Phone" Type="String" Nullable="false" />
+    <Property Name="Mail" Type="String" Nullable="false" />
+    <Property Name="Fingerprint" Type="String" Nullable="false" />
+    <NavigationProperty Name="Scenaries" Relationship="ScriptModel.AdminScenario" FromRole="Admin" ToRole="Scenario" />
+  </EntityType>
+  <EntityType Name="User">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Login" Type="String" Nullable="false" />
+    <Property Name="Password" Type="String" Nullable="false" />
+    <Property Name="FIO" Type="String" Nullable="false" />
+    <Property Name="Phone" Type="String" Nullable="false" />
+    <Property Name="Mail" Type="String" Nullable="false" />
+    <Property Name="UserType" Type="ScriptModel.UserType" Nullable="false" />
+    <NavigationProperty Name="Scenaries" Relationship="ScriptModel.UserScenario" FromRole="User" ToRole="Scenario" />
+    <NavigationProperty Name="UserGroup" Relationship="ScriptModel.UserGroupUser" FromRole="User" ToRole="UserGroup" />
+  </EntityType>
+  <EntityType Name="Scenario">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" Nullable="false" />
+    <Property Name="Description" Type="String" Nullable="false" />
+    <Property Name="ScriptFile" Type="String" Nullable="false" />
+    <Property Name="Access" Type="ScriptModel.Modificator" Nullable="false" />
+    <Property Name="LastUpdate" Type="DateTime" Nullable="false" />
+    <NavigationProperty Name="Admin" Relationship="ScriptModel.AdminScenario" FromRole="Scenario" ToRole="Admin" />
+    <NavigationProperty Name="User" Relationship="ScriptModel.UserScenario" FromRole="Scenario" ToRole="User" />
+    <NavigationProperty Name="SensorTypes" Relationship="ScriptModel.ScenarioSensorType" FromRole="Scenario" ToRole="SensorType" />
+    <NavigationProperty Name="SmartThingTypes" Relationship="ScriptModel.ScenarioSmartThingType" FromRole="Scenario" ToRole="SmartThingType" />
+    <NavigationProperty Name="ControlBoxes" Relationship="ScriptModel.ScenarioControlBox" FromRole="Scenario" ToRole="ControlBox" />
+  </EntityType>
+  <Association Name="AdminScenario">
+    <End Type="ScriptModel.Admin" Role="Admin" Multiplicity="0..1" />
+    <End Type="ScriptModel.Scenario" Role="Scenario" Multiplicity="*" />
+  </Association>
+  <Association Name="UserScenario">
+    <End Type="ScriptModel.User" Role="User" Multiplicity="0..1" />
+    <End Type="ScriptModel.Scenario" Role="Scenario" Multiplicity="*" />
+  </Association>
+  <EntityType Name="UserGroup">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" Nullable="false" />
+    <Property Name="Licence" Type="ScriptModel.Licence" Nullable="false" />
+    <NavigationProperty Name="Users" Relationship="ScriptModel.UserGroupUser" FromRole="UserGroup" ToRole="User" />
+    <NavigationProperty Name="Children" Relationship="ScriptModel.UserGroupUserGroup" FromRole="UserGroup" ToRole="UserGroup1" />
+    <NavigationProperty Name="Parent" Relationship="ScriptModel.UserGroupUserGroup" FromRole="UserGroup1" ToRole="UserGroup" />
+    <NavigationProperty Name="SmartPlaces" Relationship="ScriptModel.UserGroupSmartPlace" FromRole="UserGroup" ToRole="SmartPlace" />
+    <NavigationProperty Name="ControlBoxes" Relationship="ScriptModel.UserGroupControlBox" FromRole="UserGroup" ToRole="ControlBox" />
+  </EntityType>
+  <Association Name="UserGroupUser">
+    <End Type="ScriptModel.UserGroup" Role="UserGroup" Multiplicity="1" />
+    <End Type="ScriptModel.User" Role="User" Multiplicity="*" />
+  </Association>
+  <EntityType Name="SensorType">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" Nullable="false" />
+    <NavigationProperty Name="Scenaries" Relationship="ScriptModel.ScenarioSensorType" FromRole="SensorType" ToRole="Scenario" />
+    <NavigationProperty Name="Sensors" Relationship="ScriptModel.SensorTypeSensor" FromRole="SensorType" ToRole="Sensor" />
+  </EntityType>
+  <Association Name="ScenarioSensorType">
+    <End Type="ScriptModel.Scenario" Role="Scenario" Multiplicity="*" />
+    <End Type="ScriptModel.SensorType" Role="SensorType" Multiplicity="*" />
+  </Association>
+  <EntityType Name="SmartThingType">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" Nullable="false" />
+    <NavigationProperty Name="Scenaries" Relationship="ScriptModel.ScenarioSmartThingType" FromRole="SmartThingType" ToRole="Scenario" />
+    <NavigationProperty Name="SmartThingTypeDictionary" Relationship="ScriptModel.SmartThingTypeSmartThingTypeDictionary" FromRole="SmartThingType" ToRole="SmartThingTypeDictionary" />
+    <NavigationProperty Name="SmartThings" Relationship="ScriptModel.SmartThingTypeSmartThing" FromRole="SmartThingType" ToRole="SmartThing" />
+  </EntityType>
+  <Association Name="ScenarioSmartThingType">
+    <End Type="ScriptModel.Scenario" Role="Scenario" Multiplicity="*" />
+    <End Type="ScriptModel.SmartThingType" Role="SmartThingType" Multiplicity="*" />
+  </Association>
+  <EntityType Name="SmartThingTypeDictionary">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="LowerBound" Type="Double" Nullable="false" />
+    <Property Name="UpperBound" Type="Double" Nullable="false" />
+    <NavigationProperty Name="SmartThingType" Relationship="ScriptModel.SmartThingTypeSmartThingTypeDictionary" FromRole="SmartThingTypeDictionary" ToRole="SmartThingType" />
+  </EntityType>
+  <Association Name="SmartThingTypeSmartThingTypeDictionary">
+    <End Type="ScriptModel.SmartThingType" Role="SmartThingType" Multiplicity="1" />
+    <End Type="ScriptModel.SmartThingTypeDictionary" Role="SmartThingTypeDictionary" Multiplicity="0..1" />
+  </Association>
+  <EntityType Name="SmartPlace">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" Nullable="false" />
+    <NavigationProperty Name="UserGroup" Relationship="ScriptModel.UserGroupSmartPlace" FromRole="SmartPlace" ToRole="UserGroup" />
+    <NavigationProperty Name="Sensors" Relationship="ScriptModel.SmartPlaceSensor" FromRole="SmartPlace" ToRole="Sensor" />
+    <NavigationProperty Name="SmartThings" Relationship="ScriptModel.SmartPlaceSmartThing" FromRole="SmartPlace" ToRole="SmartThing" />
+  </EntityType>
+  <Association Name="UserGroupUserGroup">
+    <End Type="ScriptModel.UserGroup" Role="UserGroup" Multiplicity="0..1" />
+    <End Type="ScriptModel.UserGroup" Role="UserGroup1" Multiplicity="*" />
+  </Association>
+  <EntityType Name="Sensor">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" Nullable="false" />
+    <NavigationProperty Name="SensorType" Relationship="ScriptModel.SensorTypeSensor" FromRole="Sensor" ToRole="SensorType" />
+    <NavigationProperty Name="SmartPlace" Relationship="ScriptModel.SmartPlaceSensor" FromRole="Sensor" ToRole="SmartPlace" />
+    <NavigationProperty Name="ControlBox" Relationship="ScriptModel.ControlBoxSensor" FromRole="Sensor" ToRole="ControlBox" />
+  </EntityType>
+  <EntityType Name="SmartThing">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" Nullable="false" />
+    <NavigationProperty Name="SmartThingType" Relationship="ScriptModel.SmartThingTypeSmartThing" FromRole="SmartThing" ToRole="SmartThingType" />
+    <NavigationProperty Name="ControlBox" Relationship="ScriptModel.ControlBoxSmartThing" FromRole="SmartThing" ToRole="ControlBox" />
+    <NavigationProperty Name="SmartPlace" Relationship="ScriptModel.SmartPlaceSmartThing" FromRole="SmartThing" ToRole="SmartPlace" />
+  </EntityType>
+  <Association Name="SensorTypeSensor">
+    <End Type="ScriptModel.SensorType" Role="SensorType" Multiplicity="1" />
+    <End Type="ScriptModel.Sensor" Role="Sensor" Multiplicity="*" />
+  </Association>
+  <Association Name="SmartThingTypeSmartThing">
+    <End Type="ScriptModel.SmartThingType" Role="SmartThingType" Multiplicity="1" />
+    <End Type="ScriptModel.SmartThing" Role="SmartThing" Multiplicity="*" />
+  </Association>
+  <EntityType Name="ControlBox">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" Nullable="false" />
+    <Property Name="Password" Type="String" Nullable="false" />
+    <Property Name="IsStable" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="UserGroup" Relationship="ScriptModel.UserGroupControlBox" FromRole="ControlBox" ToRole="UserGroup" />
+    <NavigationProperty Name="Sensor" Relationship="ScriptModel.ControlBoxSensor" FromRole="ControlBox" ToRole="Sensor" />
+    <NavigationProperty Name="SmartThing" Relationship="ScriptModel.ControlBoxSmartThing" FromRole="ControlBox" ToRole="SmartThing" />
+    <NavigationProperty Name="Scenaries" Relationship="ScriptModel.ScenarioControlBox" FromRole="ControlBox" ToRole="Scenario" />
+  </EntityType>
+  <EntityType Name="DoubleSensor" BaseType="ScriptModel.Sensor">
+    <Property Name="Value" Type="Double" Nullable="false" />
+  </EntityType>
+  <EntityType Name="BoolSensor" BaseType="ScriptModel.Sensor">
+    <Property Name="Value" Type="Boolean" Nullable="false" />
+  </EntityType>
+  <EntityType Name="BoolSmartThing" BaseType="ScriptModel.SmartThing">
+    <Property Name="Switch" Type="ScriptModel.Switch" Nullable="false" />
+  </EntityType>
+  <EntityType Name="DoubleSmartThing1" BaseType="ScriptModel.SmartThing">
+    <Property Name="Switch" Type="ScriptModel.Switch" Nullable="false" />
+    <Property Name="Value" Type="Double" Nullable="false" />
+  </EntityType>
+  <EntityType Name="LicenceDictionary">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="LicenceType" Type="ScriptModel.Licence" Nullable="false" />
+    <Property Name="UpperBound" Type="Double" Nullable="false" />
+  </EntityType>
+  <Association Name="UserGroupSmartPlace">
+    <End Type="ScriptModel.UserGroup" Role="UserGroup" Multiplicity="1" />
+    <End Type="ScriptModel.SmartPlace" Role="SmartPlace" Multiplicity="*" />
+  </Association>
+  <Association Name="UserGroupControlBox">
+    <End Type="ScriptModel.UserGroup" Role="UserGroup" Multiplicity="1" />
+    <End Type="ScriptModel.ControlBox" Role="ControlBox" Multiplicity="*" />
+  </Association>
+  <Association Name="SmartPlaceSensor">
+    <End Type="ScriptModel.SmartPlace" Role="SmartPlace" Multiplicity="1" />
+    <End Type="ScriptModel.Sensor" Role="Sensor" Multiplicity="*" />
+  </Association>
+  <Association Name="ControlBoxSensor">
+    <End Type="ScriptModel.ControlBox" Role="ControlBox" Multiplicity="1" />
+    <End Type="ScriptModel.Sensor" Role="Sensor" Multiplicity="*" />
+  </Association>
+  <Association Name="ControlBoxSmartThing">
+    <End Type="ScriptModel.ControlBox" Role="ControlBox" Multiplicity="1" />
+    <End Type="ScriptModel.SmartThing" Role="SmartThing" Multiplicity="*" />
+  </Association>
+  <Association Name="SmartPlaceSmartThing">
+    <End Type="ScriptModel.SmartPlace" Role="SmartPlace" Multiplicity="1" />
+    <End Type="ScriptModel.SmartThing" Role="SmartThing" Multiplicity="*" />
+  </Association>
+  <Association Name="ScenarioControlBox">
+    <End Type="ScriptModel.Scenario" Role="Scenario" Multiplicity="*" />
+    <End Type="ScriptModel.ControlBox" Role="ControlBox" Multiplicity="*" />
+  </Association>
+</Schema>

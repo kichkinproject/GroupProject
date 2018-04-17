@@ -1,0 +1,276 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="ScriptModelStoreContainer" CdmEntityContainer="ScriptModelContainer1">
+    <EntitySetMapping Name="AdminSet">
+      <EntityTypeMapping TypeName="IsTypeOf(ScriptModel.Admin)">
+        <MappingFragment StoreEntitySet="AdminSet">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Login" ColumnName="Login" />
+          <ScalarProperty Name="Password" ColumnName="Password" />
+          <ScalarProperty Name="FIO" ColumnName="FIO" />
+          <ScalarProperty Name="Phone" ColumnName="Phone" />
+          <ScalarProperty Name="Mail" ColumnName="Mail" />
+          <ScalarProperty Name="Fingerprint" ColumnName="Fingerprint" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="UserSet">
+      <EntityTypeMapping TypeName="IsTypeOf(ScriptModel.User)">
+        <MappingFragment StoreEntitySet="UserSet">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Login" ColumnName="Login" />
+          <ScalarProperty Name="Password" ColumnName="Password" />
+          <ScalarProperty Name="FIO" ColumnName="FIO" />
+          <ScalarProperty Name="Phone" ColumnName="Phone" />
+          <ScalarProperty Name="Mail" ColumnName="Mail" />
+          <ScalarProperty Name="UserType" ColumnName="UserType" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ScenarioSet">
+      <EntityTypeMapping TypeName="IsTypeOf(ScriptModel.Scenario)">
+        <MappingFragment StoreEntitySet="ScenarioSet">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="ScriptFile" ColumnName="ScriptFile" />
+          <ScalarProperty Name="Access" ColumnName="Access" />
+          <ScalarProperty Name="LastUpdate" ColumnName="LastUpdate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="UserGroupSet">
+      <EntityTypeMapping TypeName="IsTypeOf(ScriptModel.UserGroup)">
+        <MappingFragment StoreEntitySet="UserGroupSet">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Licence" ColumnName="Licence" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SensorTypeSet">
+      <EntityTypeMapping TypeName="IsTypeOf(ScriptModel.SensorType)">
+        <MappingFragment StoreEntitySet="SensorTypeSet">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SmartThingTypeSet">
+      <EntityTypeMapping TypeName="IsTypeOf(ScriptModel.SmartThingType)">
+        <MappingFragment StoreEntitySet="SmartThingTypeSet">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SmartThingTypeDictionarySet">
+      <EntityTypeMapping TypeName="IsTypeOf(ScriptModel.SmartThingTypeDictionary)">
+        <MappingFragment StoreEntitySet="SmartThingTypeDictionarySet">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="LowerBound" ColumnName="LowerBound" />
+          <ScalarProperty Name="UpperBound" ColumnName="UpperBound" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SmartPlaceSet">
+      <EntityTypeMapping TypeName="IsTypeOf(ScriptModel.SmartPlace)">
+        <MappingFragment StoreEntitySet="SmartPlaceSet">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SensorSet">
+      <EntityTypeMapping TypeName="IsTypeOf(ScriptModel.Sensor)">
+        <MappingFragment StoreEntitySet="SensorSet">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+      <EntityTypeMapping TypeName="IsTypeOf(ScriptModel.DoubleSensor)">
+        <MappingFragment StoreEntitySet="SensorSet_DoubleSensor">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Value" ColumnName="Value" />
+        </MappingFragment>
+      </EntityTypeMapping>
+      <EntityTypeMapping TypeName="IsTypeOf(ScriptModel.BoolSensor)">
+        <MappingFragment StoreEntitySet="SensorSet_BoolSensor">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Value" ColumnName="Value" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SmartThingSet">
+      <EntityTypeMapping TypeName="IsTypeOf(ScriptModel.SmartThing)">
+        <MappingFragment StoreEntitySet="SmartThingSet">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+      <EntityTypeMapping TypeName="IsTypeOf(ScriptModel.BoolSmartThing)">
+        <MappingFragment StoreEntitySet="SmartThingSet_BoolSmartThing">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Switch" ColumnName="Switch" />
+        </MappingFragment>
+      </EntityTypeMapping>
+      <EntityTypeMapping TypeName="IsTypeOf(ScriptModel.DoubleSmartThing1)">
+        <MappingFragment StoreEntitySet="SmartThingSet_DoubleSmartThing1">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Switch" ColumnName="Switch" />
+          <ScalarProperty Name="Value" ColumnName="Value" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ControlBoxSet">
+      <EntityTypeMapping TypeName="IsTypeOf(ScriptModel.ControlBox)">
+        <MappingFragment StoreEntitySet="ControlBoxSet">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Password" ColumnName="Password" />
+          <ScalarProperty Name="IsStable" ColumnName="IsStable" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="LicenceDictionarySet">
+      <EntityTypeMapping TypeName="IsTypeOf(ScriptModel.LicenceDictionary)">
+        <MappingFragment StoreEntitySet="LicenceDictionarySet">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="LicenceType" ColumnName="LicenceType" />
+          <ScalarProperty Name="UpperBound" ColumnName="UpperBound" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <AssociationSetMapping Name="AdminScenario" TypeName="ScriptModel.AdminScenario" StoreEntitySet="ScenarioSet">
+      <EndProperty Name="Admin">
+        <ScalarProperty Name="Id" ColumnName="Admin_Id" />
+      </EndProperty>
+      <EndProperty Name="Scenario">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+      <Condition ColumnName="Admin_Id" IsNull="false" />
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="UserScenario" TypeName="ScriptModel.UserScenario" StoreEntitySet="ScenarioSet">
+      <EndProperty Name="User">
+        <ScalarProperty Name="Id" ColumnName="User_Id" />
+      </EndProperty>
+      <EndProperty Name="Scenario">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+      <Condition ColumnName="User_Id" IsNull="false" />
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="UserGroupUser" TypeName="ScriptModel.UserGroupUser" StoreEntitySet="UserSet">
+      <EndProperty Name="UserGroup">
+        <ScalarProperty Name="Id" ColumnName="UserGroup_Id" />
+      </EndProperty>
+      <EndProperty Name="User">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="ScenarioSensorType" TypeName="ScriptModel.ScenarioSensorType" StoreEntitySet="ScenarioSensorType">
+      <EndProperty Name="Scenario">
+        <ScalarProperty Name="Id" ColumnName="Scenaries_Id" />
+      </EndProperty>
+      <EndProperty Name="SensorType">
+        <ScalarProperty Name="Id" ColumnName="SensorTypes_Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="ScenarioSmartThingType" TypeName="ScriptModel.ScenarioSmartThingType" StoreEntitySet="ScenarioSmartThingType">
+      <EndProperty Name="Scenario">
+        <ScalarProperty Name="Id" ColumnName="Scenaries_Id" />
+      </EndProperty>
+      <EndProperty Name="SmartThingType">
+        <ScalarProperty Name="Id" ColumnName="SmartThingTypes_Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="SmartThingTypeSmartThingTypeDictionary" TypeName="ScriptModel.SmartThingTypeSmartThingTypeDictionary" StoreEntitySet="SmartThingTypeDictionarySet">
+      <EndProperty Name="SmartThingType">
+        <ScalarProperty Name="Id" ColumnName="SmartThingType_Id" />
+      </EndProperty>
+      <EndProperty Name="SmartThingTypeDictionary">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="UserGroupUserGroup" TypeName="ScriptModel.UserGroupUserGroup" StoreEntitySet="UserGroupSet">
+      <EndProperty Name="UserGroup">
+        <ScalarProperty Name="Id" ColumnName="Parent_Id" />
+      </EndProperty>
+      <EndProperty Name="UserGroup1">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+      <Condition ColumnName="Parent_Id" IsNull="false" />
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="SensorTypeSensor" TypeName="ScriptModel.SensorTypeSensor" StoreEntitySet="SensorSet">
+      <EndProperty Name="SensorType">
+        <ScalarProperty Name="Id" ColumnName="SensorType_Id" />
+      </EndProperty>
+      <EndProperty Name="Sensor">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="SmartThingTypeSmartThing" TypeName="ScriptModel.SmartThingTypeSmartThing" StoreEntitySet="SmartThingSet">
+      <EndProperty Name="SmartThingType">
+        <ScalarProperty Name="Id" ColumnName="SmartThingType_Id" />
+      </EndProperty>
+      <EndProperty Name="SmartThing">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="UserGroupSmartPlace" TypeName="ScriptModel.UserGroupSmartPlace" StoreEntitySet="SmartPlaceSet">
+      <EndProperty Name="UserGroup">
+        <ScalarProperty Name="Id" ColumnName="UserGroup_Id" />
+      </EndProperty>
+      <EndProperty Name="SmartPlace">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="UserGroupControlBox" TypeName="ScriptModel.UserGroupControlBox" StoreEntitySet="ControlBoxSet">
+      <EndProperty Name="UserGroup">
+        <ScalarProperty Name="Id" ColumnName="UserGroup_Id" />
+      </EndProperty>
+      <EndProperty Name="ControlBox">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="SmartPlaceSensor" TypeName="ScriptModel.SmartPlaceSensor" StoreEntitySet="SensorSet">
+      <EndProperty Name="SmartPlace">
+        <ScalarProperty Name="Id" ColumnName="SmartPlace_Id" />
+      </EndProperty>
+      <EndProperty Name="Sensor">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="ControlBoxSensor" TypeName="ScriptModel.ControlBoxSensor" StoreEntitySet="SensorSet">
+      <EndProperty Name="ControlBox">
+        <ScalarProperty Name="Id" ColumnName="ControlBox_Id" />
+      </EndProperty>
+      <EndProperty Name="Sensor">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="ControlBoxSmartThing" TypeName="ScriptModel.ControlBoxSmartThing" StoreEntitySet="SmartThingSet">
+      <EndProperty Name="ControlBox">
+        <ScalarProperty Name="Id" ColumnName="ControlBox_Id" />
+      </EndProperty>
+      <EndProperty Name="SmartThing">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="SmartPlaceSmartThing" TypeName="ScriptModel.SmartPlaceSmartThing" StoreEntitySet="SmartThingSet">
+      <EndProperty Name="SmartPlace">
+        <ScalarProperty Name="Id" ColumnName="SmartPlace_Id" />
+      </EndProperty>
+      <EndProperty Name="SmartThing">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="ScenarioControlBox" TypeName="ScriptModel.ScenarioControlBox" StoreEntitySet="ScenarioControlBox">
+      <EndProperty Name="Scenario">
+        <ScalarProperty Name="Id" ColumnName="Scenaries_Id" />
+      </EndProperty>
+      <EndProperty Name="ControlBox">
+        <ScalarProperty Name="Id" ColumnName="ControlBoxes_Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+  </EntityContainerMapping>
+</Mapping>
