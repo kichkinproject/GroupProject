@@ -5,25 +5,44 @@ using System.Web;
 
 namespace WebScriptManager.Models.Repositories
 {
-    public class UserGroupRepository    //класс для работы с группами пользователей из базы данных
+    /// <summary>
+    /// Репозиторий групп пользователей, позволяющий выполнять различные операции над группами пользователей в базе данных
+    /// </summary>
+    public class UserGroupRepository
     {
         private ScriptModelContainer1 cont;
         static private UserGroupRepository current = null;
-        private UserGroupRepository()  //конструктор
+        /// <summary>
+        /// Создается экземпляр репозитория для групп пользователей
+        /// </summary>
+        private UserGroupRepository()
         {
             cont = ContainerSingleton.GetContainer();
         }
+        /// <summary>
+        /// Получение репозитория групп пользователей, позволяющего взаимодействовать с группами пользователей, хранящимися в базе данных
+        /// </summary>
+        /// <returns></returns>
         static public UserGroupRepository GetRepository()
         {
             if (current == null)
                 current = new UserGroupRepository();
             return current;
         }
-        public IEnumerable<UserGroup> UserGroups()  //возвращение списка групп пользователей
+        /// <summary>
+        /// Возвращение коллекции групп пользователей, хранящихся в базе данных, отсортированных по имени
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<UserGroup> UserGroups()
         {
             return cont.UserGroupSet.OrderBy(c => c.Name); //коллекция отсортированная по именам групп пользователей
         }
-        public UserGroup this[long id]  //получение группы пользователей по ид
+        /// <summary>
+        /// Возвращение группы пользователей по идентификатору в базе данных
+        /// </summary>
+        /// <param name="id">Уникальный идентификатор группы пользователей в базе данных</param>
+        /// <returns></returns>
+        public UserGroup this[long id]
         {
             get
             {
@@ -35,14 +54,13 @@ namespace WebScriptManager.Models.Repositories
             }
         }
         /// <summary>
-        /// 
+        /// Метод, позволяющий добавлять новые группы пользователей в базу данных
         /// </summary>
-        /// <param name="_name"></param>
-        /// <param name="_licence"></param>
-        /// <param name="_parent"></param>
+        /// <param name="_name">Имя группы пользователей</param>
+        /// <param name="_licence">Лицензия, назначенная для данной группы пользователей</param>
+        /// <param name="_parent">Родительская группа пользователей для данной группы пользователей</param>
         /// <returns></returns>
-       
-        public UserGroup AddGroup(string _name, Licence _licence, UserGroup _parent = null) //добавление новой группы пользователей
+        public UserGroup AddGroup(string _name, Licence _licence, UserGroup _parent = null)
         {
             UserGroup group = new UserGroup //создание группы
             {
@@ -57,14 +75,24 @@ namespace WebScriptManager.Models.Repositories
             cont.SaveChanges(); //сохранение изменений
             return group;
         }
-        public void EditGroup(long id, string _name, Licence _licence)  //редактирование группы пользователей
+        /// <summary>
+        /// Метод, позволяющий редактировать информацию о группе пользователей
+        /// </summary>
+        /// <param name="id">Уникальный идентификатор группы пользователей в базе данных</param>
+        /// <param name="_name">Имя группы пользователей</param>
+        /// <param name="_licence">Лицензия, назначенная для данной группы пользователей</param>
+        public void EditGroup(long id, string _name, Licence _licence)
         {
             UserGroup group = this[id]; //поиск группы пользователей по ид
             group.Name = _name;
             group.Licence = _licence;
             cont.SaveChanges(); //сохранение изменений
         }
-        public void DeleteGroup(long id)    //удаление группы из бд
+        /// <summary>
+        /// Метод, позволяющий удалять группы пользователей из базы данных
+        /// </summary>
+        /// <param name="id">Уникальный идентификатор группы пользователей в базе данных</param>
+        public void DeleteGroup(long id)
         {
             UserGroup group = this[id]; //поиск группы пользователей по ид
             if (group.Children != null) //если у группы есть родитель 

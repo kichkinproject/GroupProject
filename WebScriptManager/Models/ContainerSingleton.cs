@@ -6,17 +6,27 @@ using WebScriptManager.Models.Repositories;
 
 namespace WebScriptManager.Models
 {
-    public class ContainerSingleton //контейнер для получения всех репозиториев
+    /// <summary>
+    /// Контейнер, позволяющий работать со всеми репозиториями, реализующими работу с базой данных
+    /// </summary>
+    public class ContainerSingleton
     {
         static private ScriptModelContainer1 cont = null;
-        static public ScriptModelContainer1 GetContainer()  //паттерн - синглтон
+        /// <summary>
+        /// Метод, возвращающий контейнер базы данных
+        /// </summary>
+        /// <returns></returns>
+        static public ScriptModelContainer1 GetContainer()
         {
             if (cont == null)
                 cont = new ScriptModelContainer1();
             return cont;
         }
         static private AdminRepository adminRepository = AdminRepository.GetRepository();
-        static public AdminRepository AdminRepository   //получение администраторского репозитория
+        /// <summary>
+        /// Получение администраторского репозитория для выполнения операций над адмиистраторами
+        /// </summary>
+        static public AdminRepository AdminRepository
         {
             get
             {
@@ -24,7 +34,10 @@ namespace WebScriptManager.Models
             }
         }
         static private ControlBoxRepository controlBoxRepository = ControlBoxRepository.GetRepository();
-        static public ControlBoxRepository GetControlBoxRepository  //получение контроллерского репозитория
+        /// <summary>
+        /// Получение репозитория контроллеров для выполнения операций над контроллерами
+        /// </summary>
+        static public ControlBoxRepository GetControlBoxRepository
         {
             get
             {
@@ -32,7 +45,10 @@ namespace WebScriptManager.Models
             }
         }
         static private ScenarioRepository scenarioRepository = ScenarioRepository.GetRepository();
-        static public ScenarioRepository ScenarioRepository //получение репозитория для сценариев
+        /// <summary>
+        /// Получение репозитория сценариев для выполнения операций над сценариями
+        /// </summary>
+        static public ScenarioRepository ScenarioRepository
         {
             get
             {
@@ -40,7 +56,10 @@ namespace WebScriptManager.Models
             }
         }
         static private SensorTypeRepository sensorTypeRepository = SensorTypeRepository.GetRepository();
-        static public SensorTypeRepository SensorTypeRepository //получение репозитория для типов датчиков
+        /// <summary>
+        /// Получение репозитория типов датчиков для выполнения операций над типами датчиков
+        /// </summary>
+        static public SensorTypeRepository SensorTypeRepository
         {
             get
             {
@@ -48,7 +67,10 @@ namespace WebScriptManager.Models
             }
         }
         static private SmartPlaceRepository smartPlaceRepository = SmartPlaceRepository.GetRepository();
-        static public SmartPlaceRepository SmartPlaceRepository //получение репозитория для умного места
+        /// <summary>
+        /// Получение репозитория умных мест для выполнения операций над умными местами
+        /// </summary>
+        static public SmartPlaceRepository SmartPlaceRepository
         {
             get
             {
@@ -56,7 +78,10 @@ namespace WebScriptManager.Models
             }
         }
         static private SmartThingTypeRepository smartThingTypeRepository = SmartThingTypeRepository.GetRepository();
-        static public SmartThingTypeRepository SmartThingTypeRepository //получение репозитория для типа умного объекта
+        /// <summary>
+        /// Получение репозитория типов умных объектов для выполнения операций над типами умных объектов
+        /// </summary>
+        static public SmartThingTypeRepository SmartThingTypeRepository
         {
             get
             {
@@ -64,7 +89,10 @@ namespace WebScriptManager.Models
             }
         }
         static private UserGroupRepository userGroupRepository = UserGroupRepository.GetRepository();
-        static public UserGroupRepository UserGroupRepository   //получение репозитория для группы пользователей
+        /// <summary>
+        /// Получение репозитория групп пользователей для выполнения операций над группами пользователей
+        /// </summary>
+        static public UserGroupRepository UserGroupRepository
         {
             get
             {
@@ -72,12 +100,16 @@ namespace WebScriptManager.Models
             }
         }
         static private UserRepository userRepository = UserRepository.GetRepository();
-        static public UserRepository UserRepository //получение репозитория для пользователей
+        /// <summary>
+        /// Получение пользовательского репозитория для выполнения операций над пользователями и администраторами
+        /// </summary>
+        static public UserRepository UserRepository
         {
             get
             {
                 return userRepository;
             }
         }
+
     }
 }

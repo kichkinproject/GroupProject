@@ -5,25 +5,44 @@ using System.Web;
 
 namespace WebScriptManager.Models.Repositories
 {
-    public class ControlBoxRepository //класс для работы с контроллерами из базы данных
+    /// <summary>
+    /// Репозиторий контроллеров, позволяющий выполнять различные операции над контроллерами в базе данных
+    /// </summary>
+    public class ControlBoxRepository
     {
         private ScriptModelContainer1 cont;
         static private ControlBoxRepository current = null;
-        private ControlBoxRepository()  //конструктор
+        /// <summary>
+        /// Создается экземпляр репозитория для контроллеров
+        /// </summary>
+        private ControlBoxRepository()
         {
             cont = ContainerSingleton.GetContainer();
         }
+        /// <summary>
+        /// Получение репозитория контроллеров, позволяющего взаимодействовать с контроллерами, хранящимися в базе данных
+        /// </summary>
+        /// <returns></returns>
         static public ControlBoxRepository GetRepository()
         {
             if (current == null)
                 current = new ControlBoxRepository();
             return current;
         }
-        public IEnumerable<ControlBox> Controllers()    //коллекция контроллеров
+        /// <summary>
+        /// Возвращение коллекции контроллеров, хранящихся в базе данных, отсортированных по имени
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<ControlBox> Controllers()
         {
             return cont.ControlBoxSet.OrderBy(c => c.Name);   //коллекция отсортированная по ИД
         }
-        public ControlBox this[long id]   //возвращение контроллера по идентификатору
+        /// <summary>
+        /// Возвращение контроллера по идентификатору в базе данных
+        /// </summary>
+        /// <param name="id">Уникальный идентификатор контроллера в базе данных</param>
+        /// <returns></returns>
+        public ControlBox this[long id]
         {
             get
             {
@@ -34,7 +53,15 @@ namespace WebScriptManager.Models.Repositories
                     return cb;  //найден
             }
         }
-        public ControlBox AddControlBox(string _name, string _password, bool _stable, UserGroup _group) //добавление контроллера
+        /// <summary>
+        /// Метод, позволяющий добавлять новые контроллеры в базу данных
+        /// </summary>
+        /// <param name="_name">Имя контроллера</param>
+        /// <param name="_password">Пароль, по которому контроллер будет устанавливать соединения с датчиками и умными объектами</param>
+        /// <param name="_stable">Состояние контроллера, является ли он стабильным, целым, работает без неисправностей</param>
+        /// <param name="_group">Группа пользователей, которые пользуются контроллером</param>
+        /// <returns></returns>
+        public ControlBox AddControlBox(string _name, string _password, bool _stable, UserGroup _group)
         {
             ControlBox addController = new ControlBox   //создание нового контроллера
             {
@@ -47,7 +74,14 @@ namespace WebScriptManager.Models.Repositories
             cont.SaveChanges(); //сохранение изменений
             return addController;
         }
-        public void EditControlBox(long id, string _name, string _password, bool _stable)   //редактирование информации о контроллере
+        /// <summary>
+        /// Метод, позволяющий редактировать информацию о контроллерах, изменять название, пароль, изменять состояние контроллера
+        /// </summary>
+        /// <param name="id">Уникальный идентификатор контроллера в базе данных</param>
+        /// <param name="_name">Имя контроллера</param>
+        /// <param name="_password">Пароль, по которому контроллер будет устанавливать соединения с датчиками и умными объектами</param>
+        /// <param name="_stable">Состояние контроллера, является ли он стабильным, целым, работает без неисправностей</param>
+        public void EditControlBox(long id, string _name, string _password, bool _stable)
         {
             ControlBox cb = this[id];   //поиск контроллера по ид
             cb.Name = _name;
@@ -55,7 +89,11 @@ namespace WebScriptManager.Models.Repositories
             cb.IsStable = _stable;
             cont.SaveChanges(); //сохранение изменений
         }
-        public void DeleteControlBox(long id)   //удаление контроллера из базы данных
+        /// <summary>
+        /// Метод, позволяющий удалять контроллеры из базы данных
+        /// </summary>
+        /// <param name="id">Уникальный идентификатор контроллера в базе данных</param>
+        public void DeleteControlBox(long id)
         {
             ControlBox cb = this[id];   //поиск контроллера по ид
             cb.UserGroup.ControlBoxes.Remove(cb);   //удаление контроллера из списка контроллеров группы пользователей

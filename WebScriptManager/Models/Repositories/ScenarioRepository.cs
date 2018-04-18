@@ -6,25 +6,44 @@ using System.Web;
 
 namespace WebScriptManager.Models.Repositories
 {
-    public class ScenarioRepository    //класс для работы со сценариями из базы данных
+    /// <summary>
+    /// Репозиторий сценариев, позволяющий выполнять различные операции над сценариями в базе данных
+    /// </summary>
+    public class ScenarioRepository
     {
         private ScriptModelContainer1 cont;
         static private ScenarioRepository current = null;
+        /// <summary>
+        /// Создается экземпляр репозитория для сценариев
+        /// </summary>
         private ScenarioRepository()
         {
             cont = ContainerSingleton.GetContainer();
         }
+        /// <summary>
+        /// Получение репозитория для сценариев, позволяющего взаимодействовать со сценариями, хранящимися в базе данных
+        /// </summary>
+        /// <returns></returns>
         static public ScenarioRepository GetRepository()
         {
             if (current == null)
                 current = new ScenarioRepository();
             return current;
         }
-        public IEnumerable<Scenario> Scenarios()    //коллекция сценариев
+        /// <summary>
+        /// Возвращение коллекции сценариев в базе данных, отсортированных по дате последнего обновления
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<Scenario> Scenarios()
         {
             return cont.ScenarioSet.OrderByDescending(c => c.LastUpdate);   //коллекция отсортированная по дате последнего обновления в порядке убывания
         }
-        public Scenario this[long id]   //возвращение сценария по идентификатору
+        /// <summary>
+        /// Получение сценария из базы данных по ИД
+        /// </summary>
+        /// <param name="id">ИД сценария в базе данных</param>
+        /// <returns></returns>
+        public Scenario this[long id]
         {
             get
             {
@@ -35,10 +54,23 @@ namespace WebScriptManager.Models.Repositories
                     return sc;  //найден
             }
         }
+        /// <summary>
+        /// Метод, позволяющий добавлять новые сценарии в базу данных / облако
+        /// </summary>
+        /// <param name="_name">Название сценария, отражающий основную суть реализуемых действий</param>
+        /// <param name="_script">Адрес файла XML или TXT, в котором находится созданный сценарий</param>
+        /// <param name="_mod">Модификатор доступа, определяющий, будет ли данный сценарий общедоступным или доступным лишь для определенной группы пользователей</param>
+        /// <param name="_description">Описание сценария, более подробное раскрытие поведения системы при выполнении сценария</param>
+        /// <param name="_controllers">Список контроллеров, в которые записывается сценарий</param>
+        /// <param name="_sensors">Список типов датчиков, которые принимаются участие в сценарии</param>
+        /// <param name="_things">Список типов умных объектов, которые принимаются участие в сценарии</param>
+        /// <param name="_admin">Создатель сценария, делает все сценарии глобальными и общедоступными</param>
+        /// <param name="_integrator">Создатель сценария для локального объекта, может делать сценарий локальным или глобальным</param>
+        /// <returns></returns>
         public Scenario AddScenario(
-            string _name, string _script, Modificator _mod, IEnumerable<ControlBox> _controllers = null,
-            IEnumerable<SensorType> _sensors = null, IEnumerable<SmartThingType> _things = null, string _description = "", Admin _admin = null, User _integrator = null
-            )   //добавление сценариев в БД
+            string _name, string _script, Modificator _mod = Modificator.Global, string _description = "", IEnumerable<ControlBox> _controllers = null,
+            IEnumerable<SensorType> _sensors = null, IEnumerable<SmartThingType> _things = null,  Admin _admin = null, User _integrator = null
+            )
         {
             if (_admin != null && _integrator != null)
             {
@@ -47,7 +79,7 @@ namespace WebScriptManager.Models.Repositories
                     Name = _name,
                     Description = _description, //по умолчанию описание отсутствует, иначе передаваемое значение
                     ScriptFile = _script,
-                    Access = _mod,
+                    Access = _mod,  //по умолчанию доступ к сценарию - глобальный
                     LastUpdate = new DateTime() //устанавливает текущие дату и время
                 };
                 if (_controllers != null)  //если для сценария определены контроллеры
@@ -84,6 +116,14 @@ namespace WebScriptManager.Models.Repositories
             }
             else throw new Exceptions.CreatingException("Сценарий"); //нужно создать ошибку создания (CreatingException) и заменить возвращение null на нее
         }
+        /// <summary>
+        /// Метод, позволяющий редактировать информацию о сценариях
+        /// </summary>
+        /// <param name="id">ИД сценария в БД<</param>
+        /// <param name="_name">Название сценария, отражающий основную суть реализуемых действий</param>
+        /// <param name="_script">Адрес файла XML или TXT, в котором находится созданный сценарий</param>
+        /// <param name="_mod">Модификатор доступа, определяющий, будет ли данный сценарий общедоступным или доступным лишь для определенной группы пользователей</param>
+        /// <param name="_description">Описание сценария, более подробное раскрытие поведения системы при выполнении сценария</param>
         public void EditScenario(long id, string _name, string _script, Modificator _mod, string _description = "")
         {
             Scenario scenario = this[id];   //получает сценарий по ид
@@ -94,6 +134,10 @@ namespace WebScriptManager.Models.Repositories
             scenario.LastUpdate = new DateTime();   //устанавливает текущие дату и время
             cont.SaveChanges();
         }
+        /// <summary>
+        /// Метод, позволяющий удалять сценарии из базы данных
+        /// </summary>
+        /// <param name="id">ИД сценария в БД</param>
         public void DeleteScenario(long id)
         {
             Scenario sc = this[id]; //возвращение сценария по ид
