@@ -99,16 +99,18 @@ namespace WebScriptManager.Models.Repositories
             cb.UserGroup.ControlBoxes.Remove(cb);   //удаление контроллера из списка контроллеров группы пользователей
             if (cb.SmartThing.Count != 0)   //к контроллеру подключены умные объекты
             {
+                SmartThingRepository smTRep = SmartThingRepository.GetRepository();
                 for (int i = cb.SmartThing.Count - 1; i >= 0; i--)  //обход умных объектов
                 {
-                    //происходит удаление умного объекта из базы данных
+                    smTRep.DeleteSmartThing(cb.SmartThing.ElementAt(i).Id); //удаление умного объекта из БД по ИД
                 }
             }
             if (cb.Sensor.Count != 0)   //к контроллеру подключены датчики
             {
+                SensorRepository senRep = SensorRepository.GetRepository();
                 for (int i = cb.Sensor.Count - 1; i >= 0; i--)  //обход датчиков
                 {
-                    //происходит удаление датчика из базы данных
+                    senRep.DeleteSensor(cb.Sensor.ElementAt(i).Id);// удаление датчика из базы данных
                 }
             }
             cont.ControlBoxSet.Remove(cb);  //удаление контроллера из базы данных

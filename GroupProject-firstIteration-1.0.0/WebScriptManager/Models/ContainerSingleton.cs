@@ -44,6 +44,17 @@ namespace WebScriptManager.Models
                 return controlBoxRepository;
             }
         }
+        static private LicenceDictionaryRepository licenceDictionaryRepository = LicenceDictionaryRepository.GetRepository();
+        /// <summary>
+        /// Получение репозитория лицензионных пакетов для выполнения операций над лицензионными пакетами
+        /// </summary>
+        static public LicenceDictionaryRepository LicenceDictionaryRepository
+        {
+            get
+            {
+                return licenceDictionaryRepository;
+            }
+        }
         static private ScenarioRepository scenarioRepository = ScenarioRepository.GetRepository();
         /// <summary>
         /// Получение репозитория сценариев для выполнения операций над сценариями
@@ -53,6 +64,17 @@ namespace WebScriptManager.Models
             get
             {
                 return scenarioRepository;
+            }
+        }
+        static private SensorRepository sensorRepository = SensorRepository.GetRepository();
+        /// <summary>
+        /// Получение репозитория датчиков для выполнения операций над датчиками
+        /// </summary>
+        static public SensorRepository SensorRepository
+        {
+            get
+            {
+                return sensorRepository;
             }
         }
         static private SensorTypeRepository sensorTypeRepository = SensorTypeRepository.GetRepository();
@@ -75,6 +97,28 @@ namespace WebScriptManager.Models
             get
             {
                 return smartPlaceRepository;
+            }
+        }
+        static private SmartThingRepository smartThingRepository = SmartThingRepository.GetRepository();
+        /// <summary>
+        /// Получение репозитория умных объектов для выполнения операций над умными объектами
+        /// </summary>
+        static public SmartThingRepository SmartThingRepository
+        {
+            get
+            {
+                return smartThingRepository;
+            }
+        }
+        static private SmartThingTypeDictionaryRepository smartThingTypeDictionaryRepository = SmartThingTypeDictionaryRepository.GetRepository();
+        /// <summary>
+        /// Получение репозитория словаря типов умных объектов для выполнения операций над этими словарями
+        /// </summary>
+        static public SmartThingTypeDictionaryRepository SmartThingTypeDictionaryRepository
+        {
+            get
+            {
+                return smartThingTypeDictionaryRepository;
             }
         }
         static private SmartThingTypeRepository smartThingTypeRepository = SmartThingTypeRepository.GetRepository();
@@ -108,25 +152,6 @@ namespace WebScriptManager.Models
             get
             {
                 return userRepository;
-            }
-        }
-        static private SensorRepository sensorRepository = SensorRepository.GetRepository();
-        /// <summary>
-        /// Получение сенсорного репозитория для выполнения операций над сенсорами
-        /// </summary>
-        static public SensorRepository SensorRepository
-        {
-            get
-            {
-                return sensorRepository;
-            }
-        }
-        static private SmartThingRepository smartThingRepository = SmartThingRepository.GetRepository();
-        static public SmartThingRepository SmartThingRepositor
-        {
-            get
-            {
-                return smartThingRepository;
             }
         }
 

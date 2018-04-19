@@ -91,16 +91,18 @@ namespace WebScriptManager.Models.Repositories
             sp.UserGroup.SmartPlaces.Remove(sp);   //удаление умного места из списка умных мест группы пользователей
             if (sp.SmartThings.Count != 0)   //к умному месту подключены умные объекты
             {
+                SmartThingRepository smTRep = SmartThingRepository.GetRepository();
                 for (int i = sp.SmartThings.Count - 1; i >= 0; i--)  //обход умных объектов
                 {
-                    //происходит удаление умного объекта из базы данных
+                    smTRep.DeleteSmartThing(sp.SmartThings.ElementAt(i).Id); //удаление умного объекта из БД по ИД
                 }
             }
             if (sp.Sensors.Count != 0)   //к умному месту подключены датчики
             {
+                SensorRepository senRep = SensorRepository.GetRepository();
                 for (int i = sp.Sensors.Count - 1; i >= 0; i--)  //обход датчиков
                 {
-                    //происходит удаление датчика из базы данных
+                    senRep.DeleteSensor(sp.Sensors.ElementAt(i).Id);// удаление датчика из базы данных
                 }
             }
             cont.SmartPlaceSet.Remove(sp);  //удаление умного места из базы данных
