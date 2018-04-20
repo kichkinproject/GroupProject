@@ -37,7 +37,7 @@ namespace WebScriptManager.Models
         /// <summary>
         /// Получение репозитория контроллеров для выполнения операций над контроллерами
         /// </summary>
-        static public ControlBoxRepository GetControlBoxRepository
+        static public ControlBoxRepository ControlBoxRepository
         {
             get
             {

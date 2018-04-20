@@ -12,10 +12,28 @@ namespace WebScriptManager.Controllers
 {
     public class ScenariosController : Controller
     {
+        const string wrongDataMistackeString = "Ошибка со сценарием, убедитесь, что у вас доступные Cookies и повторите попытку";
         // GET: Scenarios
         public ActionResult Index()
         {
-            return View(ContainerSingleton.GetContainer().ScenarioSet.ToList());
+       
+            
+            try
+            {
+                var userId = Int64.Parse(HttpContext.Request.Cookies["userId"].Value);
+                var user = ContainerSingleton.UserRepository[userId];
+                
+                return View(from c in ContainerSingleton.GetContainer().ScenarioSet where c.User == user select c);
+
+            }
+            catch (Models.Exceptions.NoElementException e)
+            {
+                return new Views.Shared.HtmlExceptionView(e.Message);
+            }
+            catch (Exception e)
+            {
+                return new Views.Shared.HtmlExceptionView(wrongDataMistackeString);
+            }
         }
 
         // GET: Scenarios/Details/5
@@ -23,14 +41,18 @@ namespace WebScriptManager.Controllers
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return new Views.Shared.HtmlExceptionView(wrongDataMistackeString);
             }
-            Scenario scenario = ContainerSingleton.ScenarioRepository[(long)id];
-            if (scenario == null)
+
+            try
             {
-                return HttpNotFound();
+                var scenario = ContainerSingleton.ScenarioRepository[(long)id];
+                return View(scenario);
             }
-            return View(scenario);
+            catch(Models.Exceptions.NoElementException e)
+            {
+                return new Views.Shared.HtmlExceptionView(e.Message);
+            }
         }
 
         // GET: Scenarios/Create
@@ -48,9 +70,25 @@ namespace WebScriptManager.Controllers
         {
             if (ModelState.IsValid)
             {
-                Admin me = ContainerSingleton.AdminRepository["system_author"];
-                ContainerSingleton.ScenarioRepository.AddScenario(scenario.Name, scenario.ScriptFile, scenario.Access, _description: scenario.Description, _admin: me);
-                return RedirectToAction("Index");
+                try
+                {
+                    User user = ContainerSingleton.UserRepository[Int64.Parse(HttpContext.Request.Cookies["userId"].Value)];
+                    ControlBox controlBox = ContainerSingleton.ControlBoxRepository[Int64.Parse(HttpContext.Request.Cookies["controlBoxId"].Value)];
+                    ContainerSingleton.ScenarioRepository.AddScenario(scenario.Name, scenario.ScriptFile, scenario.Access, scenario.Description, scenario.ControlBoxes, _integrator: user);
+                    return RedirectToAction("Index");
+                }
+                catch(Models.Exceptions.NoElementException e)
+                {
+                    return new Views.Shared.HtmlExceptionView(e.Message);
+                }
+                catch(Models.Exceptions.CreatingException e)
+                {
+                    return new Views.Shared.HtmlExceptionView(e.Message);
+                }
+                catch(Exception e)
+                {
+                    return new Views.Shared.HtmlExceptionView(wrongDataMistackeString);
+                }
             }
 
             return View(scenario);
@@ -61,14 +99,19 @@ namespace WebScriptManager.Controllers
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return new Views.Shared.HtmlExceptionView(wrongDataMistackeString);
             }
-            Scenario scenario = ContainerSingleton.ScenarioRepository[(long)id];
-            if (scenario == null)
+            try
             {
-                return HttpNotFound();
+                var scenario = ContainerSingleton.ScenarioRepository[(long)id];
+
+                return View(scenario);
+
             }
-            return View(scenario);
+            catch (Models.Exceptions.NoElementException e)
+            {
+                return new Views.Shared.HtmlExceptionView(e.Message);
+            }
         }
 
         // POST: Scenarios/Edit/5
@@ -78,13 +121,19 @@ namespace WebScriptManager.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "Id,Name,Description,ScriptFile,Access,LastUpdate")] Scenario scenario)
         {
-            if (ModelState.IsValid)
+            try
             {
-                //db.Entry(scenario).State = System.Data.Entity.EntityState.Modified;
-                //db.SaveChanges();
-                return RedirectToAction("Index");
+                if (ModelState.IsValid)
+                {
+                    ContainerSingleton.ScenarioRepository.EditScenario(scenario.Id, scenario.Name, scenario.ScriptFile, scenario.Access, scenario.Description);
+                    return RedirectToAction("Index");
+                }
+                return View(scenario);
             }
-            return View(scenario);
+            catch (Models.Exceptions.NoElementException e)
+            {
+                return new Views.Shared.HtmlExceptionView(e.Message);
+            }
         }
 
         // GET: Scenarios/Delete/5
@@ -92,14 +141,17 @@ namespace WebScriptManager.Controllers
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return new Views.Shared.HtmlExceptionView(wrongDataMistackeString);
             }
-            Scenario scenario = ContainerSingleton.ScenarioRepository[(long)id];
-            if (scenario == null)
+            try
             {
-                return HttpNotFound();
+                var scenario = ContainerSingleton.ScenarioRepository[(long)id];
+                return View(scenario);
             }
-            return View(scenario);
+            catch (Models.Exceptions.NoElementException e)
+            {
+                return new Views.Shared.HtmlExceptionView(e.Message);
+            }
         }
 
         // POST: Scenarios/Delete/5
@@ -107,10 +159,15 @@ namespace WebScriptManager.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(long id)
         {
-            //Scenario scenario = db.ScenarioSet.Find(id);
-            //db.ScenarioSet.Remove(scenario);
-            //db.SaveChanges();
-            return RedirectToAction("Index");
+            try
+            {
+                ContainerSingleton.ScenarioRepository.DeleteScenario(id);
+                return RedirectToAction("Index");
+            }
+            catch (Models.Exceptions.NoElementException e)
+            {
+                return new Views.Shared.HtmlExceptionView(e.Message);
+            }
         }
 
         protected override void Dispose(bool disposing)
