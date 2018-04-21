@@ -33,9 +33,12 @@ namespace WebScriptManager.Models.Repositories
         /// Возвращение коллекции администраторов в базе данных, отсортированных по администраторским логинам
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<Admin> Admins()
+        public IEnumerable<Admin> Admins
         {
-            return cont.AdminSet.OrderBy(c => c.Login); //коллекция отсортированная по логинам
+            get
+            {
+                return cont.AdminSet.OrderBy(c => c.Login); //коллекция отсортированная по логинам
+            }
         }
         /// <summary>
         /// Получение администратора из базы данных по ИД

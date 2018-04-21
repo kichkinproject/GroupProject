@@ -10,19 +10,20 @@ using WebScriptManager.Models;
 
 namespace WebScriptManager.Controllers
 {
+   
     public class ScenariosController : Controller
     {
         const string wrongDataMistackeString = "Ошибка со сценарием, убедитесь, что у вас доступные Cookies и повторите попытку";
         // GET: Scenarios
         public ActionResult Index()
         {
-       
-            
+
+
             try
             {
                 var userId = Int64.Parse(HttpContext.Request.Cookies["userId"].Value);
                 var user = ContainerSingleton.UserRepository[userId];
-                
+
                 return View(from c in ContainerSingleton.GetContainer().ScenarioSet where c.User == user select c);
 
             }
@@ -32,7 +33,7 @@ namespace WebScriptManager.Controllers
             }
             catch (Exception e)
             {
-                return new Views.Shared.HtmlExceptionView(wrongDataMistackeString);
+                return Redirect("~/Account/Index");
             }
         }
 

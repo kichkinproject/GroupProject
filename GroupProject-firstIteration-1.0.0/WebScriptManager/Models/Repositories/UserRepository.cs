@@ -41,9 +41,12 @@ namespace WebScriptManager.Models.Repositories
         /// Возвращение коллекции пользователей, хранящихся в базе данных, отсортированных по логину
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<User> Users()
+        public IEnumerable<User> Users
         {
-            return (from us in cont.UserSet where us.UserType == UserType.Simple select us).OrderBy(c => c.Login);  //пользователи типа single, отсортированные по логинам
+            get
+            {
+                return (from us in cont.UserSet where us.UserType == UserType.Simple select us).OrderBy(c => c.Login);  //пользователи типа single, отсортированные по логинам
+            }
         }
         /// <summary>
         /// Возвращение пользователя или интегратора по идентификатору в базе данных
