@@ -16,6 +16,9 @@ namespace WebScriptManager.Controllers
 
         public ActionResult Login(string returnUrl)
         {
+
+            Session["userId"] = null;
+            Session["role"] = null;
             ViewBag.ReturnUrl = returnUrl;
             return View();
         }
@@ -29,8 +32,8 @@ namespace WebScriptManager.Controllers
                 {
                     if (Models.ContainerSingleton.AdminRepository.IsAdmin(admin.Login, admin.Password))
                     {
-                        HttpContext.Response.Cookies["userId"].Value = Models.ContainerSingleton.AdminRepository[admin.Login].Id.ToString();
-                        HttpContext.Response.Cookies["role"].Value = "Admin";
+                        Session["userId"] = Models.ContainerSingleton.AdminRepository[admin.Login].Id.ToString();
+                        Session["role"] = "Admin";
                         return Redirect(returnUrl);
                     }
                     else
@@ -50,8 +53,6 @@ namespace WebScriptManager.Controllers
 
         public ActionResult Logout()
         {
-            HttpContext.Response.Cookies["userId"].Value = "noId";
-
             return RedirectToAction("Login");
         }
     }

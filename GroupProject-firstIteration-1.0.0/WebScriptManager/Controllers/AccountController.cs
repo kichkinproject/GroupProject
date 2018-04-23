@@ -22,9 +22,9 @@ namespace WebScriptManager.Controllers
         {
             try
             {
-                if (HttpContext.Request.Cookies["roles"].Value =="Admin")
+                if ((Session["roles"] as string) =="Admin")
                     RedirectToAction("RegisterIntegrator");
-                if (HttpContext.Request.Cookies["roles"].Value != "Integrator")
+                if (Session["roles"] as string != "Integrator")
                     return new Views.Shared.HtmlExceptionView("Пользователи не могут регистрировать других пользователей");
             }
             catch (Exception e)
@@ -67,7 +67,7 @@ namespace WebScriptManager.Controllers
         {
             try
             {
-                if (HttpContext.Request.Cookies["roles"].Value != "Admin")
+                if ((Session["role"] as string)!= "Admin")
                     RedirectToAction("RegisterUser");
             }
             catch (Exception e)
@@ -103,7 +103,7 @@ namespace WebScriptManager.Controllers
         {
             try
             {
-                return View(Models.ContainerSingleton.UserRepository[Int64.Parse(HttpContext.Request.Cookies["userId"].Value)]);
+                return View(Models.ContainerSingleton.UserRepository[Int64.Parse(Session["userId"] as string)]);
             }
             catch (Exception e)
             {
@@ -132,9 +132,9 @@ namespace WebScriptManager.Controllers
         public ActionResult Login(string returnUrl)
         {
             ViewBag.ReturnUrl = returnUrl;
-            HttpContext.Response.Cookies["userId"].Value = null;
+           Session["userId"] = null;
 
-            HttpContext.Response.Cookies["role"].Value = null;
+            Session["role"] = null;
             
             return View();
         }
@@ -152,11 +152,11 @@ namespace WebScriptManager.Controllers
 
                     else
                     {
-                        HttpContext.Response.Cookies["userId"].Value = list.First().Id.ToString();
+                        Session["userId"]= list.First().Id.ToString();
                         if (list.First().UserType==Models.UserType.Integrator)
-                            HttpContext.Response.Cookies["role"].Value = "Integrator";
+                            Session["role"] = "Integrator";
                         else
-                            HttpContext.Response.Cookies["role"].Value = "simpleUser";
+                            Session["role"] = "simpleUser";
                         return Redirect(returnUrl);
                     }
 

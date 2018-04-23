@@ -21,8 +21,8 @@ namespace WebScriptManager.Controllers
 
             try
             {
-                var userId = Int64.Parse(HttpContext.Request.Cookies["userId"].Value);
-                if (HttpContext.Request.Cookies["role"].Value != "Integrator")
+                var userId = Int64.Parse(Session["userId"] as string);
+                if ((Session["role"] as string) != "Integrator")
                     return new Views.Shared.HtmlExceptionView("Только интегратор может работать со сценариями");
                 var user = ContainerSingleton.UserRepository[userId];
 
@@ -61,6 +61,7 @@ namespace WebScriptManager.Controllers
         // GET: Scenarios/Create
         public ActionResult Create()
         {
+            
             return View();
         }
 
