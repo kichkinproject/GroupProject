@@ -10,16 +10,21 @@ namespace WebScriptManager.Controllers
     {
         public ActionResult Index()
         {
+            
             return RedirectToAction("Login");
         }
-        public ActionResult RegisterUser()
+        public ActionResult RegisterUser(string returnUrl)
         {
+            if (returnUrl == null)
+                returnUrl = "~/Home/Index";
+            ViewBag.ReturnUrl = returnUrl;
             return View();
         }
 
         [HttpPost]
-        public ActionResult RegisterUser(Models.User user)
+        public ActionResult RegisterUser([Bind(Include = "Id,Login,Mail,Password,Phone,FIO")] Models.User user)
         {
+           
             try
             {
                 if ((Session["roles"] as string) =="Admin")
@@ -63,7 +68,7 @@ namespace WebScriptManager.Controllers
         }
 
         [HttpPost]
-        public ActionResult RegisterIntegrator(Models.User user)
+        public ActionResult RegisterIntegrator([Bind(Include = "Id,Login,Mail,Password,Phone,FIO")] Models.User user)
         {
             try
             {
@@ -112,7 +117,7 @@ namespace WebScriptManager.Controllers
         }
 
 
-        public ActionResult Edit(Models.User user)
+        public ActionResult Edit([Bind(Include = "Id,Login,Mail,Password,Phone,FIO")] Models.User user)
         {
             try
             {
@@ -131,6 +136,9 @@ namespace WebScriptManager.Controllers
 
         public ActionResult Login(string returnUrl)
         {
+
+            if (returnUrl == null)
+                returnUrl = "~/Home/Index";
             ViewBag.ReturnUrl = returnUrl;
            Session["userId"] = null;
 
@@ -140,8 +148,10 @@ namespace WebScriptManager.Controllers
         }
 
         [HttpPost]
-        public ActionResult Login(Models.User user, string returnUrl)
+        public ActionResult Login([Bind(Include = "Id,Login,Mail,Password,Phone,FIO")] Models.User user, string returnUrl)
         {
+            if (returnUrl == null)
+                returnUrl = "~/Home/Index";
             try
             {
                 if (ModelState.IsValid)

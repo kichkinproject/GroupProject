@@ -35,7 +35,7 @@ namespace WebScriptManager.Controllers
             }
             catch (Exception e)
             {
-                return Redirect("~/Account/Index");
+                return Redirect("~/Account/Login");
             }
         }
 

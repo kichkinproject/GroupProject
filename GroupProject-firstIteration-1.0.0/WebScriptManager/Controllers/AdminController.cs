@@ -16,7 +16,8 @@ namespace WebScriptManager.Controllers
 
         public ActionResult Login(string returnUrl)
         {
-
+            if (returnUrl == null)
+                returnUrl = "~/Home/Index";
             Session["userId"] = null;
             Session["role"] = null;
             ViewBag.ReturnUrl = returnUrl;
@@ -24,7 +25,7 @@ namespace WebScriptManager.Controllers
         }
 
         [HttpPost]
-        public ActionResult Login(Models.Admin admin, string returnUrl)
+        public ActionResult Login([Bind(Include = "Id,Login,Mail,Password,Phone,FIO")]Models.Admin admin, string returnUrl)
         {
             try
             {
