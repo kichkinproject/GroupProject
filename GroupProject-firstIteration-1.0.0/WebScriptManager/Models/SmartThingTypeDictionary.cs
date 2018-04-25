@@ -11,13 +11,25 @@ namespace WebScriptManager.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+    using System.Web.Mvc;
+
     public partial class SmartThingTypeDictionary
     {
+
+        [HiddenInput(DisplayValue = false)]
         public long Id { get; set; }
+
+        [Required(ErrorMessage = "Не допускает пустое значение")]
+        [Display(Name = "Нижняя граница")]
         public double LowerBound { get; set; }
+
+        [Required(ErrorMessage = "Не допускает пустое значение")]
+        [Display(Name = "Верхняя граница")]
         public double UpperBound { get; set; }
-    
+
+        [Required(ErrorMessage = "Не допускает пустое значение")]
+        [Display(Name = "Тип умной вещи")]
         public virtual SmartThingType SmartThingType { get; set; }
     }
 }

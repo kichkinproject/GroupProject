@@ -11,10 +11,14 @@ namespace WebScriptManager.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+
     public partial class DoubleSmartThing1 : SmartThing
     {
+        [Display(Name = "Включена/выключена")]
         public Switch Switch { get; set; }
+
+        [Display(Name = "Значение")]
         public double Value { get; set; }
     }
 }

@@ -11,7 +11,9 @@ namespace WebScriptManager.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+    using System.Web.Mvc;
+
     public partial class Scenario
     {
         public Scenario()
@@ -20,15 +22,41 @@ namespace WebScriptManager.Models
             this.SmartThingTypes = new HashSet<SmartThingType>();
             this.ControlBoxes = new HashSet<ControlBox>();
         }
-    
+
+
+        [HiddenInput(DisplayValue = false)]
         public long Id { get; set; }
+
+        [StringLength(50, MinimumLength = 3, ErrorMessage = "Длинна должна быть от 3 до 50 символов")]
+        [Required(ErrorMessage = "Не допускает пустое значение")]
+        [Display(Name = "Название")]
         public string Name { get; set; }
+
+        [Display(Name = "Описание")]
         public string Description { get; set; }
+
+
+        [Required(ErrorMessage = "Не допускает пустое значение")]
+        [Display(Name = "Код сценария")]
         public string ScriptFile { get; set; }
+
+        [Display(Name = "Доступ")]
+        [Required(ErrorMessage = "Не допускает пустое значение")]
         public Modificator Access { get; set; }
+
+
+        [HiddenInput(DisplayValue = false)]
+        [Display(Name = "Последнее обновление")]
         public System.DateTime LastUpdate { get; set; }
-    
+
+
+        [HiddenInput(DisplayValue = false)]
+        [Display(Name = "Администратор")]
         public virtual Admin Admin { get; set; }
+
+
+        [HiddenInput(DisplayValue = false)]
+        [Display(Name = "Автор")]
         public virtual User User { get; set; }
         public virtual ICollection<SensorType> SensorTypes { get; set; }
         public virtual ICollection<SmartThingType> SmartThingTypes { get; set; }

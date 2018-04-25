@@ -11,9 +11,12 @@ namespace WebScriptManager.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+
     public partial class BoolSmartThing : SmartThing
     {
+
+        [Display(Name = "Значение")]
         public Switch Switch { get; set; }
     }
 }

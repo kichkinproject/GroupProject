@@ -11,7 +11,9 @@ namespace WebScriptManager.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+    using System.Web.Mvc;
+
     public partial class ControlBox
     {
         public ControlBox()
@@ -20,12 +22,25 @@ namespace WebScriptManager.Models
             this.SmartThing = new HashSet<SmartThing>();
             this.Scenaries = new HashSet<Scenario>();
         }
-    
+
+
+        [HiddenInput(DisplayValue = false)]
         public long Id { get; set; }
+
+        [Required(ErrorMessage = "Не допускает пустое значение")]
+        [Display(Name = "Название")]
         public string Name { get; set; }
+
+        [DataType(DataType.Password)]
+        [Required(ErrorMessage = "Не допускает пустое значение")]
+        [Display(Name = "Пароль")]
         public string Password { get; set; }
+
+        [Display(Name = "Состояние")]
         public bool IsStable { get; set; }
-    
+
+
+        [HiddenInput(DisplayValue = false)]
         public virtual UserGroup UserGroup { get; set; }
         public virtual ICollection<Sensor> Sensor { get; set; }
         public virtual ICollection<SmartThing> SmartThing { get; set; }

@@ -11,23 +11,54 @@ namespace WebScriptManager.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+    using System.Web.Mvc;
+
     public partial class User
     {
         public User()
         {
             this.Scenaries = new HashSet<Scenario>();
         }
-    
+
+
+        [HiddenInput(DisplayValue = false)]
         public long Id { get; set; }
+
+        [StringLength(50, MinimumLength = 3, ErrorMessage = "Длинна должна быть от 3 до 50 символов")]
+        [Required(ErrorMessage = "Не допускает пустое значение")]
+        [Display(Name = "Логин")]
         public string Login { get; set; }
+
+        [DataType(DataType.Password)]
+        [StringLength(50, MinimumLength = 7, ErrorMessage = "Длинна должна быть от 7 до 50 символов")]
+        [Required(ErrorMessage = "Не допускает пустое значение")]
+        [Display(Name = "Пароль")]
         public string Password { get; set; }
+
+        [RegularExpression(@"[A-ZА-Я][a-zа-я]* [A-ZА-Я][a-zа-я]* [A-ZА-Я][a-zа-я]*", ErrorMessage ="Не верно указано ФИО")]
+        [Required(ErrorMessage = "Не допускает пустое значение")]
+        [Display(Name = "Фамилия, имя, отчество")]
         public string FIO { get; set; }
+
+        [RegularExpression(@"^\+[2-9]\d{3}-\d{3}-\d{4}$", ErrorMessage = "Не верно указан номер телефона")]
+        [Required(ErrorMessage = "Не допускает пустое значение")]
+        [Display(Name = "Номер телефона")]
         public string Phone { get; set; }
+
+        [RegularExpression(@"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}", ErrorMessage = "Не корректный адрес электронной почты")]
+        [Required(ErrorMessage = "Не допускает пустое значение")]
+        [Display(Name = "Электронная почта")]
         public string Mail { get; set; }
+
+        [Required(ErrorMessage = "Не допускает пустое значение")]
+        [Display(Name = "Тип пользователя")]
         public UserType UserType { get; set; }
     
         public virtual ICollection<Scenario> Scenaries { get; set; }
+
+        [Required(ErrorMessage = "Не допускает пустое значение")]
+        [Display(Name = "Группа пользователей")]
         public virtual UserGroup UserGroup { get; set; }
     }
 }

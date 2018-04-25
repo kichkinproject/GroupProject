@@ -11,7 +11,9 @@ namespace WebScriptManager.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+    using System.Web.Mvc;
+
     public partial class SmartPlace
     {
         public SmartPlace()
@@ -19,10 +21,18 @@ namespace WebScriptManager.Models
             this.Sensors = new HashSet<Sensor>();
             this.SmartThings = new HashSet<SmartThing>();
         }
-    
+
+        [HiddenInput(DisplayValue = false)]
         public long Id { get; set; }
+
+        [StringLength(50, MinimumLength = 3, ErrorMessage = "Длинна должна быть от 3 до 50 символов")]
+        [Required(ErrorMessage = "Не допускает пустое значение")]
+        [Display(Name = "Название")]
         public string Name { get; set; }
-    
+
+
+
+        [HiddenInput(DisplayValue = false)]
         public virtual UserGroup UserGroup { get; set; }
         public virtual ICollection<Sensor> Sensors { get; set; }
         public virtual ICollection<SmartThing> SmartThings { get; set; }

@@ -11,9 +11,20 @@ namespace WebScriptManager.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+
     public partial class BoolSensor : Sensor
     {
+        [Display(Name = "Значение")]
         public bool Value { get; set; }
+
+        public void TurnOn()
+        {
+            Value = true;
+        }
+        public void TurnOff()
+        {
+            Value = false;
+        }
     }
 }
