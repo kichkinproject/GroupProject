@@ -11,7 +11,9 @@ namespace WebScriptManager.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+    using System.Web.Mvc;
+
     public partial class SensorType
     {
         public SensorType()
@@ -19,8 +21,13 @@ namespace WebScriptManager.Models
             this.Scenaries = new HashSet<Scenario>();
             this.Sensors = new HashSet<Sensor>();
         }
-    
+
+        [HiddenInput(DisplayValue = false)]
         public long Id { get; set; }
+
+        [StringLength(50, MinimumLength = 3, ErrorMessage = "Длинна должна быть от 3 до 50 символов")]
+        [Required(ErrorMessage = "Не допускает пустое значение")]
+        [Display(Name = "Название")]
         public string Name { get; set; }
     
         public virtual ICollection<Scenario> Scenaries { get; set; }

@@ -11,7 +11,9 @@ namespace WebScriptManager.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+    using System.Web.Mvc;
+
     public partial class UserGroup
     {
         public UserGroup()
@@ -21,9 +23,17 @@ namespace WebScriptManager.Models
             this.SmartPlaces = new HashSet<SmartPlace>();
             this.ControlBoxes = new HashSet<ControlBox>();
         }
-    
+
+        [HiddenInput(DisplayValue = false)]
         public long Id { get; set; }
+
+        [StringLength(50, MinimumLength = 3, ErrorMessage = "Длинна должна быть от 3 до 50 символов")]
+        [Required(ErrorMessage = "Не допускает пустое значение")]
+        [Display(Name = "Название")]
         public string Name { get; set; }
+
+        [Required(ErrorMessage = "Не допускает пустое значение")]
+        [Display(Name = "Лицензия")]
         public Licence Licence { get; set; }
     
         public virtual ICollection<User> Users { get; set; }

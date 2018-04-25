@@ -11,9 +11,11 @@ namespace WebScriptManager.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+
     public partial class DoubleSensor : Sensor
     {
+        [Display(Name = "Значение")]
         public double Value { get; set; }
     }
 }
