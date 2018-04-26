@@ -17,16 +17,18 @@ namespace WebScriptManager.Controllers
         // GET: Scenarios
         public ActionResult Index()
         {
-
-
             try
             {
-                var userId = Int64.Parse(Session["userId"] as string);
+                if(Session["userId"]==null)
+                    return Redirect("~/Account/Login");
                 if ((Session["role"] as string) != "Integrator")
                     return new Views.Shared.HtmlExceptionView("Только интегратор может работать со сценариями");
-                var user = ContainerSingleton.UserRepository[userId];
+                var user = ContainerSingleton.UserRepository[Int64.Parse(Session["userId"] as string)];
+                var a = (from c in Models.ContainerSingleton.ScenarioRepository.Scenarios where c.User == user select c);
 
-                return View(from c in ContainerSingleton.GetContainer().ScenarioSet where c.User == user select c);
+
+
+                return View(a);
 
             }
             catch (Models.Exceptions.NoElementException e)
@@ -61,7 +63,9 @@ namespace WebScriptManager.Controllers
         // GET: Scenarios/Create
         public ActionResult Create()
         {
-            
+            if ((Session["role"] as string) != "Integrator")
+                return new Views.Shared.HtmlExceptionView("Только интегратор может работать со сценариями");
+
             return View();
         }
 
@@ -70,15 +74,14 @@ namespace WebScriptManager.Controllers
         // сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Name,Description,ScriptFile,Access,LastUpdate")] Scenario scenario)
+        public ActionResult Create([Bind(Include = "Name,Description,ScriptFile,Access")] Scenario scenario)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    User user = ContainerSingleton.UserRepository[Int64.Parse(HttpContext.Request.Cookies["userId"].Value)];
-                    ControlBox controlBox = ContainerSingleton.ControlBoxRepository[Int64.Parse(HttpContext.Request.Cookies["controlBoxId"].Value)];
-                    ContainerSingleton.ScenarioRepository.AddScenario(scenario.Name, scenario.ScriptFile, scenario.Access, scenario.Description, scenario.ControlBoxes, _integrator: user);
+                    User user = ContainerSingleton.UserRepository[Int64.Parse(Session["userId"] as string)];
+                    ContainerSingleton.ScenarioRepository.AddScenario(scenario.Name, scenario.ScriptFile, scenario.Access, scenario.Description,  _integrator: user);
                     return RedirectToAction("Index");
                 }
                 catch(Models.Exceptions.NoElementException e)

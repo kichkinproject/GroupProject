@@ -33,21 +33,36 @@ namespace WebScriptManager.Models.Repositories
         /// Возвращение коллекции интеграторов, хранящихся в базе данных, отсортированных по логину
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<User> Integrators()
+        public IEnumerable<User> Integrators
         {
-            return (from integr in cont.UserSet where integr.UserType == UserType.Integrator select integr).OrderBy(c => c.Login);  //пользователи типа интегратор, отсортированные по логинам
+            get
+            {
+                return (from integr in cont.UserSet where integr.UserType == UserType.Integrator select integr).OrderBy(c => c.Login);  //пользователи типа интегратор, отсортированные по логинам
+            }
         }
         /// <summary>
-        /// Возвращение коллекции пользователей, хранящихся в базе данных, отсортированных по логину
+        /// Возвращение коллекции простых пользователей, хранящихся в базе данных, отсортированных по логину
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<User> Users
+        public IEnumerable<User> SimpleUsers
         {
             get
             {
                 return (from us in cont.UserSet where us.UserType == UserType.Simple select us).OrderBy(c => c.Login);  //пользователи типа single, отсортированные по логинам
             }
         }
+        /// <summary>
+        /// Возвращение коллекции всех пользователей, хранящихся в базе данных
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<User> AllUsers
+        {
+            get
+            {
+                return (cont.UserSet);  //пользователи типа single, отсортированные по логинам
+            }
+        }
+
         /// <summary>
         /// Возвращение пользователя или интегратора по идентификатору в базе данных
         /// </summary>
@@ -60,6 +75,24 @@ namespace WebScriptManager.Models.Repositories
                 User user = cont.UserSet.Find(id);
                 if (user != null) //пользователь найден
                     return user;
+                else
+                    throw new Exceptions.NoElementException("Пользователь");  //если нет, то ошибка
+            }
+        }
+
+        /// <summary>
+        /// Возвращение пользователя или интегратора по логину в базе данных
+        /// </summary>
+        /// <param name="_login">Логин пользователя в базе данных</param>
+        /// <returns>найденный пользователь</returns>
+        /// <exception cref="Exceptions.NoElementException">Если пользователь не найден</exception>
+        public User this[string _login]
+        {
+            get
+            {
+                var list = from c in cont.UserSet where c.Login == _login select c;
+                if (list.Count()>0) //пользователь найден
+                    return list.First();
                 else
                     throw new Exceptions.NoElementException("Пользователь");  //если нет, то ошибка
             }
