@@ -36,7 +36,7 @@ namespace WebScriptManager.Controllers
                     if (Models.ContainerSingleton.AdminRepository.IsAdmin(admin.Login, admin.Password))
                     {
                         if (returnUrl == null)
-                            returnUrl = "~/Home/Index";
+                            returnUrl = "~/Admin/AdminList";
                         Session["userId"] = Models.ContainerSingleton.AdminRepository[admin.Login].Id.ToString();
                         Session["role"] = "Admin";
                         return Redirect(returnUrl);
