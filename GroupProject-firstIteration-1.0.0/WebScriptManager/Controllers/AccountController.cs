@@ -13,11 +13,10 @@ namespace WebScriptManager.Controllers
             
             return RedirectToAction("Login");
         }
-        public ActionResult RegisterUser(string returnUrl)
+        public ActionResult RegisterUser()
         {
-            if (returnUrl == null)
-                returnUrl = "~/Home/Index";
-            ViewBag.ReturnUrl = returnUrl;
+            if (Session["returnUrl"] == null)
+                Session["returnUrl"] = "~/Home/Index";
             return View();
         }
 
@@ -61,8 +60,7 @@ namespace WebScriptManager.Controllers
             }
         }
 
-
-   
+  
         // GET: Account
         public ActionResult Edit()
         {
@@ -94,12 +92,11 @@ namespace WebScriptManager.Controllers
             }
         }
 
-        public ActionResult Login(string returnUrl)
+        public ActionResult Login()
         {
 
-            if (returnUrl == null)
-                returnUrl = "~/Home/Index";
-            ViewBag.ReturnUrl = returnUrl;
+            if (Session["returnUrl"] == null)
+                Session["returnUrl"] = "~/Home/Index";
            Session["userId"] = null;
 
             Session["role"] = null;
@@ -108,10 +105,10 @@ namespace WebScriptManager.Controllers
         }
 
         [HttpPost]
-        public ActionResult Login([Bind(Include = "Login,Password")] Models.ViewAdaptors.UserLoginViewAdapter user, string returnUrl)
+        public ActionResult Login([Bind(Include = "Login,Password")] Models.ViewAdaptors.UserLoginViewAdapter user)
         {
-            if (returnUrl == null)
-                returnUrl = "~/Home/Index";
+            if (Session["returnUrl"] == null)
+                Session["returnUrl"] = "~/Home/Index";
             try
             {
                 if (ModelState.IsValid)
@@ -127,7 +124,7 @@ namespace WebScriptManager.Controllers
                             Session["role"] = "Integrator";
                         else
                             Session["role"] = "SimpleUser";
-                        return Redirect(returnUrl);
+                        return Redirect(Session["returnUrl"] as string);
                     }
 
                 }
@@ -136,13 +133,11 @@ namespace WebScriptManager.Controllers
                     ModelState.Clear();
                     ModelState.AddModelError("Password", "Неверный логин или пароль");
                 }
-                ViewBag.ReturnUrl = returnUrl;
                 return View(user);
             }
             catch (Models.Exceptions.NoElementException e)
             {
                 ModelState.AddModelError("Password", "Неверный логин или пароль");
-                ViewBag.ReturnUrl = returnUrl;
                 return View(user);
             }
             catch (Exception e)

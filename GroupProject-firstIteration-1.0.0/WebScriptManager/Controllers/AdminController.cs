@@ -14,19 +14,18 @@ namespace WebScriptManager.Controllers
             return RedirectToAction("Logout");
         }
 
-        public ActionResult Login(string returnUrl)
+        public ActionResult Login()
 
         {
-            if (returnUrl == null)
-                returnUrl = "~/Home/Index";
+            if (Session["returnUrl"] == null)
+                Session["returnUrl"] = "~/Home/Index";
             Session["userId"] = null;
             Session["role"] = null;
-            ViewBag.ReturnUrl = returnUrl;
             return View();
         }
 
         [HttpPost]
-        public ActionResult Login([Bind(Include = "Login,Password")]Models.ViewAdaptors.AdminLoginViewAdapter admin, string returnUrl)
+        public ActionResult Login([Bind(Include = "Login,Password")]Models.ViewAdaptors.AdminLoginViewAdapter admin)
         {
 
             try
@@ -35,11 +34,11 @@ namespace WebScriptManager.Controllers
                 {
                     if (Models.ContainerSingleton.AdminRepository.IsAdmin(admin.Login, admin.Password))
                     {
-                        if (returnUrl == null)
-                            returnUrl = "~/Admin/AdminList";
+                        if (Session["returnUrl"] == null)
+                            Session["returnUrl"] = "~/Home/Index";
                         Session["userId"] = Models.ContainerSingleton.AdminRepository[admin.Login].Id.ToString();
                         Session["role"] = "Admin";
-                        return Redirect(returnUrl);
+                        return Redirect(Session["returnUrl"] as string);
                     }
                     else
                     {
@@ -53,9 +52,8 @@ namespace WebScriptManager.Controllers
                     ModelState.Clear();
                     ModelState.AddModelError("Password", "Неверный логин или пароль");
                 }
-                if (returnUrl == null)
-                    returnUrl = "~/Home/Index";
-                ViewBag.ReturnUrl = returnUrl;
+                if (Session["returnUrl"] == null)
+                    Session["returnUrl"] = "~/Home/Index";
                 return View(admin);
             }
             catch (Exception e)

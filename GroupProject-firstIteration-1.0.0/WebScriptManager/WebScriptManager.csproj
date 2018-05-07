@@ -256,6 +256,7 @@
       <DependentUpon>ScriptModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ViewAdaptors\AdminLoginViewAdapter.cs" />
+    <Compile Include="Models\ViewAdaptors\ScenarioViewAdaptor.cs" />
     <Compile Include="Models\ViewAdaptors\UserLoginViewAdapter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Views\Shared\HtmlExceptionView.cs" />

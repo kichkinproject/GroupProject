@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -19,12 +20,16 @@ namespace WebScriptManager.Controllers
         {
             try
             {
-                if(Session["userId"]==null)
+                if (Session["userId"] == null)
+                {
+                    Session["returnUrl"] = ("~Scenarios/Index");
                     return Redirect("~/Account/Login");
+                }
                 if ((Session["role"] as string) != "Integrator")
                     return new Views.Shared.HtmlExceptionView("Только интегратор может работать со сценариями");
                 var user = ContainerSingleton.UserRepository[Int64.Parse(Session["userId"] as string)];
-                var a = (from c in Models.ContainerSingleton.ScenarioRepository.Scenarios where c.User == user select c);
+
+                var a = (from c in Models.ContainerSingleton.ScenarioRepository.Scenarios where c.User == user select new Models.ViewAdaptors.ScenarioViewAdaptor(c));
 
 
 
@@ -37,6 +42,7 @@ namespace WebScriptManager.Controllers
             }
             catch (Exception e)
             {
+                Session["returnUrl"] = "~/Scenarios/Index";
                 return Redirect("~/Account/Login");
             }
         }
@@ -51,8 +57,7 @@ namespace WebScriptManager.Controllers
 
             try
             {
-                var scenario = ContainerSingleton.ScenarioRepository[(long)id];
-                return View(scenario);
+                return View(new Models.ViewAdaptors.ScenarioViewAdaptor(ContainerSingleton.ScenarioRepository[(long)id]));
             }
             catch(Models.Exceptions.NoElementException e)
             {
@@ -74,14 +79,21 @@ namespace WebScriptManager.Controllers
         // сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Name,Description,ScriptFile,Access")] Scenario scenario)
+        public ActionResult Create([Bind(Include = "Name,Description,ScriptFile,Access")] Models.ViewAdaptors.ScenarioViewAdaptor scenario)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
                     User user = ContainerSingleton.UserRepository[Int64.Parse(Session["userId"] as string)];
-                    ContainerSingleton.ScenarioRepository.AddScenario(scenario.Name, scenario.ScriptFile, scenario.Access, scenario.Description,  _integrator: user);
+                    var currentScenario = ContainerSingleton.ScenarioRepository.AddScenario(scenario.Name, "", scenario.Access, scenario.Description,  _integrator: user);
+
+                    ContainerSingleton.ScenarioRepository.EditScenario(currentScenario.Id, scenario.Name, "scenarioScript" + currentScenario.Id, scenario.Access, scenario.Description);
+
+                    var outputFile = new StreamWriter("scenarioScript" + currentScenario.Id);
+                    foreach(var a in scenario.ScriptFile)
+                        outputFile.WriteLine(a);
+
                     return RedirectToAction("Index");
                 }
                 catch(Models.Exceptions.NoElementException e)
@@ -110,9 +122,7 @@ namespace WebScriptManager.Controllers
             }
             try
             {
-                var scenario = ContainerSingleton.ScenarioRepository[(long)id];
-
-                return View(scenario);
+                return View(new Models.ViewAdaptors.ScenarioViewAdaptor(ContainerSingleton.ScenarioRepository[(long)id]));
 
             }
             catch (Models.Exceptions.NoElementException e)
@@ -126,13 +136,16 @@ namespace WebScriptManager.Controllers
         // сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name,Description,ScriptFile,Access,LastUpdate")] Scenario scenario)
+        public ActionResult Edit([Bind(Include = "Id,Name,Description,ScriptFile,Access,LastUpdate")] Models.ViewAdaptors.ScenarioViewAdaptor scenario)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    ContainerSingleton.ScenarioRepository.EditScenario(scenario.Id, scenario.Name, scenario.ScriptFile, scenario.Access, scenario.Description);
+                    ContainerSingleton.ScenarioRepository.EditScenario(scenario.Id, scenario.Name, "scenarioScrpit"+scenario.Id, scenario.Access, scenario.Description);
+                    var outputFile = new StreamWriter("scenarioScript" + scenario.Id, false);
+                    foreach(var a in scenario.ScriptFile)
+                        outputFile.WriteLine(a);
                     return RedirectToAction("Index");
                 }
                 return View(scenario);
@@ -152,8 +165,7 @@ namespace WebScriptManager.Controllers
             }
             try
             {
-                var scenario = ContainerSingleton.ScenarioRepository[(long)id];
-                return View(scenario);
+                return View(new Models.ViewAdaptors.ScenarioViewAdaptor(ContainerSingleton.ScenarioRepository[(long)id]));
             }
             catch (Models.Exceptions.NoElementException e)
             {
