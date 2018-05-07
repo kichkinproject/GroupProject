@@ -24,6 +24,8 @@
                     <li>@Html.ActionLink("Администраторы", "AdminList", "Admin")</li>
                     <li>@Html.ActionLink("Интеграторы", "Index", "Integrator")</li>
                     <li>@Html.ActionLink("Сценарии", "Index", "Scenarios")</li>
+                    <li>@Html.ActionLink("Кабинет администратора", "Details/" + (Session["userId"] as string), "Admin")</li>
+                    <li>@Html.ActionLink("Выйти", "Login", "Admin")</li>
                 </ul>
             </div>
         </div>

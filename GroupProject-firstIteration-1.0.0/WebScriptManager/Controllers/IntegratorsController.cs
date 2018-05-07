@@ -12,12 +12,11 @@ namespace WebScriptManager.Controllers
 {
     public class IntegratorsController : Controller
     {
-        private ScriptModelContainer1 db = new ScriptModelContainer1();
 
         // GET: Integrators
         public ActionResult Index()
         {
-            return View(db.UserSet.ToList());
+            return View(Models.ContainerSingleton.UserRepository.Integrators.ToList());
         }
 
         // GET: Integrators/Details/5
@@ -27,7 +26,7 @@ namespace WebScriptManager.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            User user = db.UserSet.Find(id);
+            User user = ContainerSingleton.UserRepository[(long)id];
             if (user == null)
             {
                 return HttpNotFound();
@@ -37,15 +36,12 @@ namespace WebScriptManager.Controllers
 
         public ActionResult Create()
         {
-            if ((Session["role"] as string) != "Admin")
-                return Redirect("~/Admin/Login/");
             return View();
         }
 
         [HttpPost]
         public ActionResult Create([Bind(Include = "Login,Mail,Password,Phone,FIO")] Models.User user)
         {
-
             user.UserGroup = new Models.UserGroup();
             try
             {
@@ -57,7 +53,7 @@ namespace WebScriptManager.Controllers
                     // HttpContext.Response.Cookies["userId"].Value = (from c in Models.ContainerSingleton.UserRepository.Users where c.Login == user.Login select c).First().Id.ToString();
                     //HttpContext.Response.Cookies["roles"].Value = "Integrator";
                     ModelState.AddModelError("", "Интегратор добавлен");
-                    return View(new Models.User());
+                    return Redirect("~/Integrators/Index");
                 }
                 else
                 {
@@ -87,7 +83,7 @@ namespace WebScriptManager.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            User user = db.UserSet.Find(id);
+            User user = ContainerSingleton.UserRepository[(long)id];
             if (user == null)
             {
                 return HttpNotFound();
@@ -105,7 +101,7 @@ namespace WebScriptManager.Controllers
             if (ModelState.IsValid)
             {
                 //db.Entry(user).State = EntityState.Modified;
-                db.SaveChanges();
+                ContainerSingleton.UserRepository.EditUser(user.Id, user.Password, user.FIO, UserType.Integrator, user.Phone, user.Mail);
                 return RedirectToAction("Index");
             }
             return View(user);
@@ -118,7 +114,7 @@ namespace WebScriptManager.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            User user = db.UserSet.Find(id);
+            User user = ContainerSingleton.UserRepository[(long)id];
             if (user == null)
             {
                 return HttpNotFound();
@@ -131,19 +127,17 @@ namespace WebScriptManager.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(long id)
         {
-            User user = db.UserSet.Find(id);
-            db.UserSet.Remove(user);
-            db.SaveChanges();
+            ContainerSingleton.UserRepository.DeleteUser(id);
             return RedirectToAction("Index");
         }
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
-        }
+        //protected override void Dispose(bool disposing)
+        //{
+        //    if (disposing)
+        //    {
+        //        db.Dispose();
+        //    }
+        //    base.Dispose(disposing);
+        //}
     }
 }

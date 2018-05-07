@@ -120,10 +120,17 @@ namespace WebScriptManager.Controllers
                     else
                     {
                         Session["userId"]= cur.Id.ToString();
-                        if (cur.UserType==Models.UserType.Integrator)
+                        if (cur.UserType == Models.UserType.Integrator)
+                        {
                             Session["role"] = "Integrator";
+                            Session["returnUrl"] = "~/Integrators/Details/";
+                        }
                         else
+                        {
                             Session["role"] = "SimpleUser";
+                            Session["returnUrl"] = "~/Account/Details/";
+                        }
+                        Session["returnUrl"] += cur.Id.ToString();
                         return Redirect(Session["returnUrl"] as string);
                     }
 

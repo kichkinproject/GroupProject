@@ -27,25 +27,22 @@ namespace WebScriptManager.Controllers
         [HttpPost]
         public ActionResult Login([Bind(Include = "Login,Password")]Models.ViewAdaptors.AdminLoginViewAdapter admin)
         {
-
             try
             {
                 if (ModelState.IsValid)
                 {
                     if (Models.ContainerSingleton.AdminRepository.IsAdmin(admin.Login, admin.Password))
                     {
-                        if (Session["returnUrl"] == null)
-                            Session["returnUrl"] = "~/Home/Index";
                         Session["userId"] = Models.ContainerSingleton.AdminRepository[admin.Login].Id.ToString();
                         Session["role"] = "Admin";
+                        Session["returnUrl"] = "~/Admin/Details";
+                        Session["returnUrl"] += "/" + (Session["userId"] as string);
                         return Redirect(Session["returnUrl"] as string);
                     }
                     else
                     {
                         ModelState.AddModelError("Password", "Неверный логин или пароль");
                     }
-
-
                 }
                 else
                 {
@@ -53,7 +50,7 @@ namespace WebScriptManager.Controllers
                     ModelState.AddModelError("Password", "Неверный логин или пароль");
                 }
                 if (Session["returnUrl"] == null)
-                    Session["returnUrl"] = "~/Home/Index";
+                    Session["returnUrl"] = "~/Admin/Details";
                 return View(admin);
             }
             catch (Exception e)
