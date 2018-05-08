@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using WebScriptManager.Models;
 
 namespace WebScriptManager.Controllers
 {
@@ -10,10 +11,17 @@ namespace WebScriptManager.Controllers
     {
         public ActionResult Index()
         {
-            
-            return RedirectToAction("Login");
+            if ((Session["role"] as string) == null)
+                return RedirectToAction("Login");
+            if ((Session["role"] as string) == "Admin" || (Session["role"] as string) == "SimpleUser")
+                return RedirectToAction("Login", "Integrators");
+            User integr = ContainerSingleton.UserRepository[Int64.Parse(Session["userId"] as string)];
+            UserGroup group = ContainerSingleton.UserGroupRepository[integr.UserGroup.Id];
+            IEnumerable<User> usersInGroup = group.Users.ToList();
+            usersInGroup = usersInGroup.Intersect(ContainerSingleton.UserRepository.SimpleUsers);
+            return View(usersInGroup);
         }
-        public ActionResult RegisterUser()
+        public ActionResult Create()
         {
             if (Session["returnUrl"] == null)
                 Session["returnUrl"] = "~/Home/Index";
@@ -21,14 +29,14 @@ namespace WebScriptManager.Controllers
         }
 
         [HttpPost]
-        public ActionResult RegisterUser([Bind(Include = "Id,Login,Mail,Password,Phone,FIO")] Models.User user)
+        public ActionResult Create([Bind(Include = "Id,Login,Mail,Password,Phone,FIO")] Models.User user)
         {
            
             try
             {
-                if ((Session["roles"] as string) =="Admin")
+                if ((Session["role"] as string) =="Admin")
                     RedirectToAction("RegisterIntegrator");
-                if (Session["roles"] as string != "Integrator")
+                if (Session["role"] as string != "Integrator")
                     return new Views.Shared.HtmlExceptionView("Пользователи не могут регистрировать других пользователей");
             }
             catch (Exception e)
@@ -39,10 +47,11 @@ namespace WebScriptManager.Controllers
             {
                 if (ModelState.IsValid && (from c in Models.ContainerSingleton.UserRepository.AllUsers where c.Login == user.Login || c.Mail == user.Mail select c).Count() == 0)
                 {
+
                     Models.ContainerSingleton.UserRepository.AddUser(user.Login, user.Password, user.FIO, user.UserType, user.UserGroup, user.Phone, user.Mail);
                    // HttpContext.Response.Cookies["userId"].Value = (from c in Models.ContainerSingleton.UserRepository.Users where c.Login == user.Login select c).First().Id.ToString();
                     //HttpContext.Response.Cookies["roles"].Value = "Integrator";
-                    return RedirectToAction("RegisterUser");
+                    return RedirectToAction("Index");
                 }
                 else
                 {

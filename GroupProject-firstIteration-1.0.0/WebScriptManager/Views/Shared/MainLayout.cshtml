@@ -21,9 +21,16 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Менеджер сценариев", "Login", "Account")</li>
+                    <li>@Html.ActionLink("Менеджер сценариев", "Index", "Home")</li>
                     <li>@Html.ActionLink("О программе", "About", "Home")</li>
                     <li>@Html.ActionLink("Контакты", "Contact", "Home")</li>
+                    @{
+                        if (Session["role"] as string == "SimpleUser")
+                        {
+                            @: <li>@Html.ActionLink("Кабинет пользователя", "Details", "Account")</li>
+                            @: <li>@Html.ActionLink("Выйти", "Logout", "Account")</li>
+                        }
+                    }
                 </ul>
             </div>
         </div>

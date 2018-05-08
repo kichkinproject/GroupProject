@@ -44,11 +44,17 @@
         <td align="center">
             @Html.ActionLink("Просмотреть", "Details", new { id = item.Id })                
             @{
-                    if (item.Id.ToString() == (Session["userId"] as string) || (Session["role"] as string) == "Admin")
-                    {
+                if (item.Id.ToString() == (Session["userId"] as string) || (Session["role"] as string) == "Admin")
+                {
                         @Html.Label("", "    |    ");
                         @:       
                         @Html.ActionLink("Редактировать", "Edit", new { id = item.Id });
+                }
+                if ((Session["role"] as string) == "Admin")
+                {
+                        @Html.Label("", "    |    ");
+                        @:
+                        @Html.ActionLink("Удалить", "Delete", new { id = item.Id });
                 }
             }
         </td>

@@ -6,11 +6,11 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
-    <title>Details</title>
+    <title>Страница пользователя</title>
 </head>
 <body>
     <div>
-        <h4>User</h4>
+        <h4>Пользователь</h4>
         <hr />
         <dl class="dl-horizontal">
             <dt>
@@ -64,8 +64,15 @@
         </dl>
     </div>
     <p>
-        @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-        @Html.ActionLink("Back to List", "Index")
+        @{
+            if (Model.Id.ToString() == (Session["userId"] as string) || (Session["role"] as string) == "Integrator")
+            {
+            @Html.ActionLink("Редактировать", "Edit", new { id = Model.Id });
+            @:
+            @Html.Label("", "    |    ");
+                }
+            }
+        @Html.ActionLink("Пользователи", "Index")
     </p>
 </body>
 </html>
