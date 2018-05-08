@@ -113,7 +113,7 @@ namespace WebScriptManager.Models.Repositories
             }
             if (group.Users.Count != 0)  //если для группы определены пользователи
             {
-                UserRepository userRep = ContainerSingleton.UserRepository;  //инструмент для удаления пользователей
+                UserRepository userRep = UserRepository.GetRepository();  //инструмент для удаления пользователей
                 for (int i = group.Users.Count - 1; i >= 0; i--)
                 {
                     userRep.DeleteUser(group.Users.ElementAt(i).Id); //удаление пользователя из БД по ИД

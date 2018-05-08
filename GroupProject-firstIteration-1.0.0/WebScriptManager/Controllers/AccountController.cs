@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.Entity;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using WebScriptManager.Models;
 
 namespace WebScriptManager.Controllers
 {
@@ -10,21 +14,48 @@ namespace WebScriptManager.Controllers
     {
         public ActionResult Index()
         {
-            return RedirectToAction("Login");
+            if ((Session["role"] as string) == null)
+                return RedirectToAction("Login");
+            if ((Session["role"] as string) == "Admin")
+                return RedirectToAction("Login", "Integrators");
+            User integr = ContainerSingleton.UserRepository[Int64.Parse(Session["userId"] as string)];
+            UserGroup group = ContainerSingleton.UserGroupRepository[integr.UserGroup.Id];
+            IEnumerable<User> usersInGroup = group.Users.ToList();
+            usersInGroup = usersInGroup.Intersect(ContainerSingleton.UserRepository.SimpleUsers);
+            return View(usersInGroup);
         }
-        public ActionResult RegisterUser()
+        public ActionResult Create()
         {
+            if (Session["returnUrl"] == null)
+                Session["returnUrl"] = "~/Home/Index";
             return View();
         }
-
-        [HttpPost]
-        public ActionResult RegisterUser(Models.User user)
+        // GET: Integrators/Details/5
+        public ActionResult Details(long? id)
         {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
             try
             {
-                if ((Session["roles"] as string) =="Admin")
+                User user = ContainerSingleton.UserRepository[(long)id];
+                return View(user);
+            }
+            catch (Models.Exceptions.NoElementException e)
+            {
+                return new Views.Shared.HtmlExceptionView(e.Message);
+            }
+        }
+        [HttpPost]
+        public ActionResult Create([Bind(Include = "Id,Login,Mail,Password,Phone,FIO")] Models.User user)
+        {
+           
+            try
+            {
+                if ((Session["role"] as string) =="Admin")
                     RedirectToAction("RegisterIntegrator");
-                if (Session["roles"] as string != "Integrator")
+                if (Session["role"] as string != "Integrator")
                     return new Views.Shared.HtmlExceptionView("Пользователи не могут регистрировать других пользователей");
             }
             catch (Exception e)
@@ -33,12 +64,14 @@ namespace WebScriptManager.Controllers
             }
             try
             {
-                if (ModelState.IsValid && (from c in Models.ContainerSingleton.UserRepository.Users where c.Login == user.Login || c.Mail == user.Mail select c).Count() == 0)
+                if (ModelState.IsValid && (from c in Models.ContainerSingleton.UserRepository.AllUsers where c.Login == user.Login || c.Mail == user.Mail select c).Count() == 0)
                 {
-                    Models.ContainerSingleton.UserRepository.AddUser(user.Login, user.Password, user.FIO, user.UserType, user.UserGroup, user.Phone, user.Mail);
+                    User integr = ContainerSingleton.UserRepository[Int64.Parse(Session["userId"] as string)];
+                    UserGroup group = ContainerSingleton.UserGroupRepository[integr.UserGroup.Id];
+                    Models.ContainerSingleton.UserRepository.AddUser(user.Login, user.Password, user.FIO, UserType.Simple, group, user.Phone, user.Mail);
                    // HttpContext.Response.Cookies["userId"].Value = (from c in Models.ContainerSingleton.UserRepository.Users where c.Login == user.Login select c).First().Id.ToString();
                     //HttpContext.Response.Cookies["roles"].Value = "Integrator";
-                    return RedirectToAction("RegisterUser");
+                    return RedirectToAction("Index");
                 }
                 else
                 {
@@ -56,69 +89,34 @@ namespace WebScriptManager.Controllers
             }
         }
 
-
-        public ActionResult RegisterIntegrator()
+  
+        // GET: Account
+        public ActionResult Edit(long? id)
         {
-            return View();
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            try
+            {
+                User user = ContainerSingleton.UserRepository[(long)id];
+
+                return View(user);
+            }
+            catch (Models.Exceptions.NoElementException e)
+            {
+                return new Views.Shared.HtmlExceptionView(e.Message);
+            }
         }
 
         [HttpPost]
-        public ActionResult RegisterIntegrator(Models.User user)
-        {
-            try
-            {
-                if ((Session["role"] as string)!= "Admin")
-                    RedirectToAction("RegisterUser");
-            }
-            catch (Exception e)
-            {
-                RedirectToAction("Login");
-            }
-            try
-            {
-                if (ModelState.IsValid && (from c in Models.ContainerSingleton.UserRepository.Users where c.Login == user.Login || c.Mail == user.Mail select c).Count() == 0)
-                {
-                    Models.ContainerSingleton.UserRepository.AddUser(user.Login, user.Password, user.FIO, Models.UserType.Integrator, user.UserGroup, user.Phone, user.Mail);
-                    // HttpContext.Response.Cookies["userId"].Value = (from c in Models.ContainerSingleton.UserRepository.Users where c.Login == user.Login select c).First().Id.ToString();
-                    //HttpContext.Response.Cookies["roles"].Value = "Integrator";
-                    return RedirectToAction("RegisterIntegrator");
-                }
-                else
-                {
-                    ModelState.AddModelError("", "Такой логин или Email уже заняты");
-                    return View(user);
-                }
-            }
-            catch (Models.Exceptions.CreatingException e)
-            {
-                return new Views.Shared.HtmlExceptionView(e.Message);
-            }
-            catch (Models.Exceptions.NoElementException e)
-            {
-                return new Views.Shared.HtmlExceptionView(e.Message);
-            }
-        }
-        // GET: Account
-        public ActionResult Edit()
-        {
-            try
-            {
-                return View(Models.ContainerSingleton.UserRepository[Int64.Parse(Session["userId"] as string)]);
-            }
-            catch (Exception e)
-            {
-                return RedirectToAction("Login");
-            }
-        }
-
-
-        public ActionResult Edit(Models.User user)
+        public ActionResult Edit([Bind(Include = "Id,Login,Mail,Password,Phone,FIO")] Models.User user)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    Models.ContainerSingleton.UserRepository.EditUser(user.Id, user.Password, user.FIO, user.UserType, user.Phone, user.Mail);
+                    Models.ContainerSingleton.UserRepository.EditUser(user.Id, user.Password, user.FIO, UserType.Simple, user.Phone, user.Mail);
                     return RedirectToAction("Index");
                 }
                 return View(user);
@@ -129,9 +127,11 @@ namespace WebScriptManager.Controllers
             }
         }
 
-        public ActionResult Login(string returnUrl)
+        public ActionResult Login()
         {
-            ViewBag.ReturnUrl = returnUrl;
+
+            if (Session["returnUrl"] == null)
+                Session["returnUrl"] = "~/Home/Index";
            Session["userId"] = null;
 
             Session["role"] = null;
@@ -140,28 +140,46 @@ namespace WebScriptManager.Controllers
         }
 
         [HttpPost]
-        public ActionResult Login(Models.User user, string returnUrl)
+        public ActionResult Login([Bind(Include = "Login,Password")] Models.ViewAdaptors.UserLoginViewAdapter user)
         {
+            if (Session["returnUrl"] == null)
+                Session["returnUrl"] = "~/Home/Index";
             try
             {
                 if (ModelState.IsValid)
                 {
-                    var list = from c in Models.ContainerSingleton.UserRepository.Users where c.Login == user.Login select c;
-                    if (list.Count() == 0 || list.First().Password != user.Password)
-                        ModelState.AddModelError("", "Неверный логин или пароль");
+                    var cur = Models.ContainerSingleton.UserRepository[user.Login];
+                    if (cur.Password != user.Password)
+                        ModelState.AddModelError("Password", "Неверный логин или пароль");
 
                     else
                     {
-                        Session["userId"]= list.First().Id.ToString();
-                        if (list.First().UserType==Models.UserType.Integrator)
+                        Session["userId"]= cur.Id.ToString();
+                        if (cur.UserType == Models.UserType.Integrator)
+                        {
                             Session["role"] = "Integrator";
+                            Session["returnUrl"] = "~/Integrators/Details/";
+                        }
                         else
-                            Session["role"] = "simpleUser";
-                        return Redirect(returnUrl);
+                        {
+                            Session["role"] = "SimpleUser";
+                            Session["returnUrl"] = "~/Account/Details/";
+                        }
+                        Session["returnUrl"] += cur.Id.ToString();
+                        return Redirect(Session["returnUrl"] as string);
                     }
 
                 }
-                ViewBag.ReturnUrl = returnUrl;
+                else
+                {
+                    ModelState.Clear();
+                    ModelState.AddModelError("Password", "Неверный логин или пароль");
+                }
+                return View(user);
+            }
+            catch (Models.Exceptions.NoElementException e)
+            {
+                ModelState.AddModelError("Password", "Неверный логин или пароль");
                 return View(user);
             }
             catch (Exception e)
@@ -174,5 +192,32 @@ namespace WebScriptManager.Controllers
         {
             return RedirectToAction("Login");
         }
+        // GET: Integrators/Delete/5
+        public ActionResult Delete(long? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            try
+            {
+                User user = ContainerSingleton.UserRepository[(long)id];
+                return View(user);
+            }
+            catch (Models.Exceptions.NoElementException e)
+            {
+                return new Views.Shared.HtmlExceptionView(e.Message);
+            }
+        }
+
+        // POST: Integrators/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteConfirmed(long id)
+        {
+            ContainerSingleton.UserRepository.DeleteUser(id);
+            return RedirectToAction("Index");
+        }
+
     }
 }

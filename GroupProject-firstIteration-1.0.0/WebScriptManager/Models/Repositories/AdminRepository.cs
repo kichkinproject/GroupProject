@@ -79,13 +79,17 @@ namespace WebScriptManager.Models.Repositories
         /// <returns></returns>
         public bool IsAdmin(string _login, string _password)
         {
-            Admin admin = this[_login];   //нахождение по логину
-            if (admin != null)
-            {   //логин совпал
+            try
+            {
+                Admin admin = this[_login];   //нахождение по логину
                 if (admin.Password == _password)
                     return true;    //логин и пароль совпали
+                return false;   //логин или пароль не совпали
             }
-            return false;   //логин или пароль не совпали
+            catch(Exceptions.NoElementException e)
+            {
+                return false;
+            }
         }
         /// <summary>
         /// Метод, позволяющий добавлять новых администраторов в базу данных / облако

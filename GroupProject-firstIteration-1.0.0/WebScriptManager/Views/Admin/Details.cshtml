@@ -1,0 +1,65 @@
+﻿@model WebScriptManager.Models.Admin
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Администраторы</h2>
+
+<div>
+    <h4>Админ</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Login)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Login)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FIO)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FIO)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Phone)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Phone)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Mail)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Mail)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Fingerprint)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Fingerprint)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @{
+        if (Model.Id.ToString() == (Session["userId"] as string))
+        {
+            @Html.ActionLink("Редактировать", "Edit", new { id = Model.Id });
+            @:
+            @Html.Label("", "    |    ");
+        }
+    }
+    @Html.ActionLink("Администраторы", "AdminList")
+</p>

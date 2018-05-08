@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -17,17 +18,18 @@ namespace WebScriptManager.Controllers
         // GET: Scenarios
         public ActionResult Index()
         {
-
-
             try
             {
-                var userId = Int64.Parse(Session["userId"] as string);
+                if (Session["userId"] == null)
+                {
+                    Session["returnUrl"] = ("~Scenarios/Index");
+                    return Redirect("~/Account/Login");
+                }
                 if ((Session["role"] as string) != "Integrator")
                     return new Views.Shared.HtmlExceptionView("Только интегратор может работать со сценариями");
-                var user = ContainerSingleton.UserRepository[userId];
-
-                return View(from c in ContainerSingleton.GetContainer().ScenarioSet where c.User == user select c);
-
+                var user = ContainerSingleton.UserRepository[Int64.Parse(Session["userId"] as string)];
+                var a = (from c in Models.ContainerSingleton.ScenarioRepository.Scenarios where c.User == user select c).ToList();
+                return View(a);
             }
             catch (Models.Exceptions.NoElementException e)
             {
@@ -35,7 +37,8 @@ namespace WebScriptManager.Controllers
             }
             catch (Exception e)
             {
-                return Redirect("~/Account/Index");
+                Session["returnUrl"] = "~/Scenarios/Index";
+                return Redirect("~/Account/Login");
             }
         }
 
@@ -46,11 +49,9 @@ namespace WebScriptManager.Controllers
             {
                 return new Views.Shared.HtmlExceptionView(wrongDataMistackeString);
             }
-
             try
             {
-                var scenario = ContainerSingleton.ScenarioRepository[(long)id];
-                return View(scenario);
+                return View(new Models.ViewAdaptors.ScenarioViewAdaptor(ContainerSingleton.ScenarioRepository[(long)id]));
             }
             catch(Models.Exceptions.NoElementException e)
             {
@@ -61,7 +62,9 @@ namespace WebScriptManager.Controllers
         // GET: Scenarios/Create
         public ActionResult Create()
         {
-            
+            if ((Session["role"] as string) != "Integrator")
+                return new Views.Shared.HtmlExceptionView("Только интегратор может работать со сценариями");
+
             return View();
         }
 
@@ -70,15 +73,21 @@ namespace WebScriptManager.Controllers
         // сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Name,Description,ScriptFile,Access,LastUpdate")] Scenario scenario)
+        public ActionResult Create([Bind(Include = "Name,Description,ScriptFile,Access")] Models.ViewAdaptors.ScenarioViewAdaptor scenario)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    User user = ContainerSingleton.UserRepository[Int64.Parse(HttpContext.Request.Cookies["userId"].Value)];
-                    ControlBox controlBox = ContainerSingleton.ControlBoxRepository[Int64.Parse(HttpContext.Request.Cookies["controlBoxId"].Value)];
-                    ContainerSingleton.ScenarioRepository.AddScenario(scenario.Name, scenario.ScriptFile, scenario.Access, scenario.Description, scenario.ControlBoxes, _integrator: user);
+                    User user = ContainerSingleton.UserRepository[Int64.Parse(Session["userId"] as string)];
+                    var currentScenario = ContainerSingleton.ScenarioRepository.AddScenario(scenario.Name, "", scenario.Access, scenario.Description,  _integrator: user);
+
+                    ContainerSingleton.ScenarioRepository.EditScenario(currentScenario.Id, scenario.Name, "scenarioScript" + currentScenario.Id, scenario.Access, scenario.Description);
+
+                    var outputFile = new StreamWriter("scenarioScript" + currentScenario.Id);
+                    foreach(var a in scenario.ScriptFile)
+                        outputFile.WriteLine(a);
+
                     return RedirectToAction("Index");
                 }
                 catch(Models.Exceptions.NoElementException e)
@@ -107,9 +116,7 @@ namespace WebScriptManager.Controllers
             }
             try
             {
-                var scenario = ContainerSingleton.ScenarioRepository[(long)id];
-
-                return View(scenario);
+                return View(new Models.ViewAdaptors.ScenarioViewAdaptor(ContainerSingleton.ScenarioRepository[(long)id]));
 
             }
             catch (Models.Exceptions.NoElementException e)
@@ -123,13 +130,16 @@ namespace WebScriptManager.Controllers
         // сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name,Description,ScriptFile,Access,LastUpdate")] Scenario scenario)
+        public ActionResult Edit([Bind(Include = "Id,Name,Description,ScriptFile,Access,LastUpdate")] Models.ViewAdaptors.ScenarioViewAdaptor scenario)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    ContainerSingleton.ScenarioRepository.EditScenario(scenario.Id, scenario.Name, scenario.ScriptFile, scenario.Access, scenario.Description);
+                    ContainerSingleton.ScenarioRepository.EditScenario(scenario.Id, scenario.Name, "scenarioScrpit"+scenario.Id, scenario.Access, scenario.Description);
+                    var outputFile = new StreamWriter("scenarioScript" + scenario.Id, false);
+                    foreach(var a in scenario.ScriptFile)
+                        outputFile.WriteLine(a);
                     return RedirectToAction("Index");
                 }
                 return View(scenario);
@@ -149,8 +159,7 @@ namespace WebScriptManager.Controllers
             }
             try
             {
-                var scenario = ContainerSingleton.ScenarioRepository[(long)id];
-                return View(scenario);
+                return View(new Models.ViewAdaptors.ScenarioViewAdaptor(ContainerSingleton.ScenarioRepository[(long)id]));
             }
             catch (Models.Exceptions.NoElementException e)
             {

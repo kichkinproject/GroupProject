@@ -1,3 +1,27 @@
 ﻿@{
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    if (Session["role"] == null)
+    {
+        Layout = "~/Views/Shared/MainLayout.cshtml";
+    }
+    else
+    {
+        if ((Session["role"] as string) == "Admin")
+        {
+            Layout = "~/Views/Shared/AdminLayout.cshtml";
+        }
+        else
+        {
+            if ((Session["role"] as string) == "Integrator")
+            {
+                Layout = "~/Views/Shared/IntegratorLayout.cshtml";
+            }
+            else
+            {
+                if ((Session["role"] as string) == "SimpleUser")
+                {
+                    Layout = "~/Views/Shared/MainLayout.cshtml";
+                }
+            }
+        }
+    }
 }

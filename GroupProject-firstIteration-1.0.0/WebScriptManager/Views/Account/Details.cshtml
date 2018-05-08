@@ -1,0 +1,62 @@
+﻿@model WebScriptManager.Models.User
+
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Страница пользователя</title>
+</head>
+<body>
+    <div>
+        <h4>Пользователь</h4>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.Login)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.Login)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.FIO)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.FIO)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.Phone)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.Phone)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.Mail)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.Mail)
+            </dd>
+    
+            </dl>
+    </div>
+    <p>
+        @{
+            if (Model.Id.ToString() == (Session["userId"] as string) || (Session["role"] as string) == "Integrator")
+            {
+            @Html.ActionLink("Редактировать", "Edit", new { id = Model.Id });
+            @:
+            @Html.Label("", "    |    ");
+                }
+            }
+        @Html.ActionLink("Пользователи", "Index")
+    </p>
+</body>
+</html>

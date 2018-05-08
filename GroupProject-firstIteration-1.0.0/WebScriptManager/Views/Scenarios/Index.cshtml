@@ -4,10 +4,10 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+<h2>Список сценариев</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Создать", "Create")
 </p>
 <table class="table">
     <tr>
@@ -26,7 +26,7 @@
         <th>
             @Html.DisplayNameFor(model => model.LastUpdate)
         </th>
-        <th></th>
+        @* <th></th>*@
     </tr>
 
 @foreach (var item in Model) {
@@ -38,7 +38,7 @@
             @Html.DisplayFor(modelItem => item.Description)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.ScriptFile)
+            @Html.DisplayNameFor(model => model.ScriptFile)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Access)
@@ -46,11 +46,11 @@
         <td>
             @Html.DisplayFor(modelItem => item.LastUpdate)
         </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
-        </td>
+        @*<td>
+            @Html.ActionLink("Редактирование", "Edit", new { id=item.Id }) |
+            @Html.ActionLink("Просмотреть", "Details", new { id=item.Id }) |
+            @Html.ActionLink("Удалить", "Delete", new { id=item.Id })
+        </td>*@
     </tr>
 }
 

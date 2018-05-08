@@ -10,6 +10,11 @@ namespace WebScriptManager.Controllers
     {
         public ActionResult Index()
         {
+            if (Session["userId"] == null)
+            {
+                Session["returnUrl"] = ("~Home/Index");
+                return Redirect("~/Account/Login");
+            }
             return View();
         }
 

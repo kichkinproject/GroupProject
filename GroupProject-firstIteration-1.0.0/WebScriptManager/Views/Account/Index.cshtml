@@ -1,0 +1,71 @@
+﻿@model IEnumerable<WebScriptManager.Models.User>
+
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Список пользователей</title>
+</head>
+<body>
+    <h2>Пользователи</h2>
+
+    <p>
+        @Html.ActionLink("Создать", "Create")
+    </p>
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Login)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FIO)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Phone)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Mail)
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Login)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FIO)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Phone)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Mail)
+                </td>
+                <td>
+                    @Html.ActionLink("Просмотреть", "Details", new { id = item.Id })
+                    @{
+                        if (item.Id.ToString() == (Session["userId"] as string) || (Session["role"] as string) == "Integrator")
+                        {
+                            @Html.Label("", "    |    ");
+                            @:
+                            @Html.ActionLink("Редактировать", "Edit", new { id = item.Id });
+                        }
+                        if ((Session["role"] as string) == "Integrator")
+                        {
+                            @Html.Label("", "    |    ");
+                            @:
+                            @Html.ActionLink("Удалить", "Delete", new { id = item.Id });
+                        }
+                    }
+                </td>
+            </tr>
+        }
+
+    </table>
+</body>
+</html>

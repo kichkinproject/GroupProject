@@ -34,9 +34,12 @@ namespace WebScriptManager.Models.Repositories
         /// Возвращение коллекции сценариев в базе данных, отсортированных по дате последнего обновления
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<Scenario> Scenarios()
+        public IEnumerable<Scenario> Scenarios
         {
-            return cont.ScenarioSet.OrderByDescending(c => c.LastUpdate);   //коллекция отсортированная по дате последнего обновления в порядке убывания
+            get
+            {
+                return cont.ScenarioSet.OrderByDescending(c => c.LastUpdate);   //коллекция отсортированная по дате последнего обновления в порядке убывания
+            }
         }
         /// <summary>
         /// Получение сценария из базы данных по ИД
@@ -72,7 +75,7 @@ namespace WebScriptManager.Models.Repositories
             IEnumerable<SensorType> _sensors = null, IEnumerable<SmartThingType> _things = null,  Admin _admin = null, User _integrator = null
             )
         {
-            if (_admin != null && _integrator != null)
+            if (_admin != null ^ _integrator!=null)
             {
                 Scenario addScenario = new Scenario //создание нового сценария
                 {
@@ -80,7 +83,7 @@ namespace WebScriptManager.Models.Repositories
                     Description = _description, //по умолчанию описание отсутствует, иначе передаваемое значение
                     ScriptFile = _script,
                     Access = _mod,  //по умолчанию доступ к сценарию - глобальный
-                    LastUpdate = new DateTime() //устанавливает текущие дату и время
+                    LastUpdate = DateTime.Now //устанавливает текущие дату и время
                 };
                 if (_controllers != null)  //если для сценария определены контроллеры
                 {
@@ -131,7 +134,7 @@ namespace WebScriptManager.Models.Repositories
             scenario.Description = _description;
             scenario.ScriptFile = _script;
             scenario.Access = _mod;
-            scenario.LastUpdate = new DateTime();   //устанавливает текущие дату и время
+            scenario.LastUpdate = DateTime.Now;   //устанавливает текущие дату и время
             cont.SaveChanges();
         }
         /// <summary>

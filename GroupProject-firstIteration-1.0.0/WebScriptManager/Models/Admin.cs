@@ -42,7 +42,7 @@ namespace WebScriptManager.Models
         [Display(Name = "Фамилия, имя и отчество")]
         public string FIO { get; set; }
 
-        [RegularExpression(@"^\+[2-9]\d{3}-\d{3}-\d{4}$", ErrorMessage = "Не верно указан номер телефона")]
+        [RegularExpression(@"\+[2-9]-\d{3}-\d{3}-\d{4}$", ErrorMessage = "Формат номера : +X-XXX-XXX-XXXX")]
         [Required(ErrorMessage = "Не допускает пустое значение")]
         [Display(Name = "Номер телефона")]
         public string Phone { get; set; }
