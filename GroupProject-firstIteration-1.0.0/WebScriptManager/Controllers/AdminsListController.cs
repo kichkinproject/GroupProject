@@ -10,21 +10,20 @@ using WebScriptManager.Models;
 
 namespace WebScriptManager.Controllers
 {
-    public class IntegratorsController : Controller
+    public class AdminsListController : Controller
     {
-
-        // GET: Integrators
         public ActionResult Index()
         {
             try
             {
-                User user = ContainerSingleton.UserRepository[Int64.Parse(Session["userId"].ToString())];
-                return View(from c in ContainerSingleton.UserRepository.Integrators.ToList() where c.UserGroup==user.UserGroup select c);
+                if(Session["role"] as string !="Admin")
+                    return Redirect("~/Admin/Login");
+                return View(ContainerSingleton.AdminRepository.Admins);
             }
-            catch (Exception e )
+            catch (Exception e)
             {
-                Session["returnUrl"] = "~/Integrators/Index";
-                return Redirect("~/Account/Login");
+                Session["returnUrl"] = "~/AdminsList/Index";
+                return Redirect("~/Admin/Login");
             }
         }
 
@@ -35,17 +34,15 @@ namespace WebScriptManager.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-
             try
             {
-                User user = ContainerSingleton.UserRepository[(long)id];
-                return View(user);
+                var admin = ContainerSingleton.AdminRepository[(long)id];
+                return View(admin);
             }
             catch (Models.Exceptions.NoElementException e)
             {
-                return new Views.Shared.HtmlExceptionView( e.Message);
+                return new Views.Shared.HtmlExceptionView(e.Message);
             }
-           
         }
 
         public ActionResult Create()
@@ -54,19 +51,17 @@ namespace WebScriptManager.Controllers
         }
 
         [HttpPost]
-        public ActionResult Create([Bind(Include = "Login,Mail,Password,Phone,FIO")] Models.User user)
+        public ActionResult Create([Bind(Include = "Login,Mail,Password,Phone,FIO")] Models.Admin user)
         {
-            user.UserGroup = new Models.UserGroup();
             try
             {
 
-                if (ModelState.IsValid && (from c in Models.ContainerSingleton.UserRepository.AllUsers where c.Login == user.Login || c.Mail == user.Mail select c).Count() == 0)
+                if (ModelState.IsValid && (from c in Models.ContainerSingleton.AdminRepository.Admins where c.Login == user.Login || c.Mail == user.Mail select c).Count() == 0)
                 {
-                    var userGroup = Models.ContainerSingleton.UserGroupRepository.AddGroup(user.Login + " group", Models.Licence.None);
-                    Models.ContainerSingleton.UserRepository.AddUser(user.Login, user.Password, user.FIO, Models.UserType.Integrator, userGroup, user.Phone, user.Mail);
+                   ContainerSingleton.AdminRepository.AddAdmin(user.Login, user.Password, user.FIO,   user.Phone, user.Mail);
                     // HttpContext.Response.Cookies["userId"].Value = (from c in Models.ContainerSingleton.UserRepository.Users where c.Login == user.Login select c).First().Id.ToString();
                     //HttpContext.Response.Cookies["roles"].Value = "Integrator";
-                    ModelState.AddModelError("", "Интегратор добавлен");
+                    ModelState.AddModelError("", "Администратор добавлен");
                     return View(user);
                 }
                 else
@@ -89,7 +84,7 @@ namespace WebScriptManager.Controllers
                 return Redirect("~/Admin/Login");
             }
         }
-      
+
 
         // GET: Integrators/Edit/5
         public ActionResult Edit(long? id)
@@ -98,12 +93,10 @@ namespace WebScriptManager.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-
             try
             {
-                User user = ContainerSingleton.UserRepository[(long)id];
-
-                return View(user);
+                var admin = ContainerSingleton.AdminRepository[(long)id];
+                return View(admin);
             }
             catch (Models.Exceptions.NoElementException e)
             {
@@ -116,19 +109,19 @@ namespace WebScriptManager.Controllers
         // сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Login,Password,FIO,Phone,Mail,UserType")] User user)
+        public ActionResult Edit([Bind(Include = "Id,Login,Password,FIO,Phone,Mail")] Admin user)
         {
             if (ModelState.IsValid)
             {
                 //db.Entry(user).State = EntityState.Modified;
-                ContainerSingleton.UserRepository.EditUser(user.Id, user.Password, user.FIO, UserType.Integrator, user.Phone, user.Mail);
+                ContainerSingleton.AdminRepository.EditAdmin(user.Id, user.Password, user.FIO, user.Phone, user.Mail);
                 return RedirectToAction("Index");
             }
             return View(user);
         }
 
         // GET: Integrators/Delete/5
-        public ActionResult Delete(long? id)
+        /*public ActionResult Delete(long? id)
         {
             if (id == null)
             {
@@ -136,22 +129,24 @@ namespace WebScriptManager.Controllers
             }
             try
             {
-                User user = ContainerSingleton.UserRepository[(long)id];
-                return View(user);
+                var admin = ContainerSingleton.AdminRepository[(long)id];
+                return View(admin);
             }
             catch (Models.Exceptions.NoElementException e)
             {
                 return new Views.Shared.HtmlExceptionView(e.Message);
             }
         }
+
         // POST: Integrators/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(long id)
         {
-            ContainerSingleton.UserRepository.DeleteUser(id);
+            ContainerSingleton.AdminRepository.Delete(id);
             return RedirectToAction("Index");
-        }
+        }*/
+
 
         //protected override void Dispose(bool disposing)
         //{

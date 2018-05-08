@@ -158,6 +158,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="Controllers\AdminsListController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\IntegratorsController.cs" />
     <Compile Include="Controllers\ScenariosController.cs" />
@@ -340,6 +341,11 @@
     <Content Include="Views\Admin\AdminList.cshtml" />
     <Content Include="Views\Admin\Edit.cshtml" />
     <Content Include="Views\Admin\Details.cshtml" />
+    <Content Include="Views\AdminsList\Create.cshtml" />
+    <Content Include="Views\AdminsList\Delete.cshtml" />
+    <Content Include="Views\AdminsList\Details.cshtml" />
+    <Content Include="Views\AdminsList\Edit.cshtml" />
+    <Content Include="Views\AdminsList\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
