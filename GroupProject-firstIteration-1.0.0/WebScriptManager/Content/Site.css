@@ -18,9 +18,10 @@
 
 /* Set width on the form input elements since they're 100% wide by default */
 input,
-select,
+select {
+    max-width: 280px;
+}
 textarea {
-    max-width: 480x;
-    width: 300px;
-    height: 200px;
+    height: 300px;
+    width: 800px;
 }

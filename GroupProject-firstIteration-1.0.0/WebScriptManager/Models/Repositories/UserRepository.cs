@@ -162,5 +162,11 @@ namespace WebScriptManager.Models.Repositories
             cont.UserSet.Remove(user);  //удаляется пользователь
             cont.SaveChanges(); //изменения сохраняются
         }
+        public void DeleteIntegrator(long id)
+        {
+            User user = this[id];
+            ContainerSingleton.UserGroupRepository.DeleteGroup(user.UserGroup.Id);
+            cont.SaveChanges();
+        }
     }
 }

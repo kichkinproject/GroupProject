@@ -147,7 +147,7 @@ namespace WebScriptManager.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(long id)
         {
-            ContainerSingleton.UserRepository.DeleteUser(id);
+            ContainerSingleton.UserRepository.DeleteIntegrator(id);
             return RedirectToAction("Index");
         }
 

@@ -2,15 +2,17 @@
 
 @{
     ViewBag.Title = "Create";
+
 }
 
 <h2>Создание</h2>
 
 
-@using (Html.BeginForm()) 
+@using (Html.BeginForm())
 {
+    @Styles.Render("~/Content/Site.css")
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
         <h4>Сценарий</h4>
         <hr />
@@ -34,7 +36,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.ScriptFile, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.TextAreaFor(model => model.ScriptFile, new { htmlAttributes = new { @style = "height: 250px; width: 300px"} } )
+                @Html.TextAreaFor(model => model.ScriptFile, new { htmlAttributes = new { @style = "height: 250px; width: 300px" } })
                 @Html.ValidationMessageFor(model => model.ScriptFile, "", new { @class = "text-danger" })
             </div>
         </div>

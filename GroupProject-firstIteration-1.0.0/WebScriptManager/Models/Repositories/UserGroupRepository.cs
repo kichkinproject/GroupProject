@@ -95,28 +95,25 @@ namespace WebScriptManager.Models.Repositories
         public void DeleteGroup(long id)
         {
             UserGroup group = this[id]; //поиск группы пользователей по ид
-            if (group.Children != null) //если у группы есть родитель 
-            {
-                group.Parent.Children.Remove(group);  //удаление текущей группы из ее родительской группы  
-            }
             if (group.SmartPlaces.Count != 0)    //если для группы определены умные места
             {
-                //удаление из базы данных умных мест, принадлежащих данной группе пользователей
+                for (int i = group.SmartPlaces.Count - 1; i >= 0; i--)
+                {
+                    ContainerSingleton.SmartPlaceRepository.DeleteSmartPlace(group.SmartPlaces.ElementAt(i).Id); //удаление из базы данных умных мест, принадлежащих данной группе пользователей
+                }
             }
             if (group.ControlBoxes.Count != 0)    //если для группы определены контроллеры
             {
-                ControlBoxRepository controllerRep = ControlBoxRepository.GetRepository();    //инструмент для удаления контроллеров из БД
                 for (int i = group.ControlBoxes.Count - 1; i >= 0; i--)
                 {
-                    controllerRep.DeleteControlBox(group.ControlBoxes.ElementAt(i).Id); //удаление контроллера из БД по ИД
+                    ContainerSingleton.ControlBoxRepository.DeleteControlBox(group.ControlBoxes.ElementAt(i).Id); //удаление контроллера из БД по ИД
                 }
             }
             if (group.Users.Count != 0)  //если для группы определены пользователи
             {
-                UserRepository userRep = UserRepository.GetRepository();  //инструмент для удаления пользователей
                 for (int i = group.Users.Count - 1; i >= 0; i--)
                 {
-                    userRep.DeleteUser(group.Users.ElementAt(i).Id); //удаление пользователя из БД по ИД
+                    ContainerSingleton.UserRepository.DeleteUser(group.Users.ElementAt(i).Id); //удаление пользователя из БД по ИД
                 }
             }
             if (group.Children.Count != 0)    //если для группы определены потомки
