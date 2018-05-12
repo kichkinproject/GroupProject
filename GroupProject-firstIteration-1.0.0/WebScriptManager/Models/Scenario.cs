@@ -37,7 +37,7 @@ namespace WebScriptManager.Models
 
 
         [Required(ErrorMessage = "Не допускает пустое значение")]
-        [Display(Name = "Код сценария")]
+        [Display(Name = "Адрес сценария")]
         public string ScriptFile { get; set; }
 
         [Display(Name = "Доступ")]

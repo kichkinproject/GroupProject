@@ -22,7 +22,7 @@ namespace WebScriptManager.Models.ViewAdaptors
             Name = input.Name;
             Id = input.Id;
             Description = input.Description;
-            ScriptFile = System.IO.File.ReadAllLines("scenarioScript"+Id);            
+            ScriptFile = System.IO.File.ReadAllLines(Controllers.ScenariosController.path+Id);            
             Access = input.Access;
             LastUpdate = input.LastUpdate;
             Admin = input.Admin;

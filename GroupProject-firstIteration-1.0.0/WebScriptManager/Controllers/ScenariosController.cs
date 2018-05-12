@@ -14,6 +14,7 @@ namespace WebScriptManager.Controllers
    
     public class ScenariosController : Controller
     {
+        public const string path = @"C:\path\scenarioScript";
         const string wrongDataMistackeString = "Ошибка со сценарием, убедитесь, что у вас доступные Cookies и повторите попытку";
         // GET: Scenarios
         public ActionResult Index()
@@ -80,14 +81,14 @@ namespace WebScriptManager.Controllers
                 try
                 {
                     User user = ContainerSingleton.UserRepository[Int64.Parse(Session["userId"] as string)];
-                    var currentScenario = ContainerSingleton.ScenarioRepository.AddScenario(scenario.Name, "", scenario.Access, scenario.Description,  _integrator: user);
+                    var currentScenario = ContainerSingleton.ScenarioRepository.AddScenario(scenario.Name, "231", scenario.Access, scenario.Description,  _integrator: user);
 
-                    ContainerSingleton.ScenarioRepository.EditScenario(currentScenario.Id, scenario.Name, "scenarioScript" + currentScenario.Id, scenario.Access, scenario.Description);
+                    ContainerSingleton.ScenarioRepository.EditScenario(currentScenario.Id, scenario.Name, path + currentScenario.Id, scenario.Access, scenario.Description);
 
-                    var outputFile = new StreamWriter("scenarioScript" + currentScenario.Id);
+                    var outputFile = new StreamWriter(path + currentScenario.Id);
                     foreach(var a in scenario.ScriptFile)
                         outputFile.WriteLine(a);
-
+                    outputFile.Close();
                     return RedirectToAction("Index");
                 }
                 catch(Models.Exceptions.NoElementException e)
@@ -136,10 +137,11 @@ namespace WebScriptManager.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    ContainerSingleton.ScenarioRepository.EditScenario(scenario.Id, scenario.Name, "scenarioScrpit"+scenario.Id, scenario.Access, scenario.Description);
-                    var outputFile = new StreamWriter("scenarioScript" + scenario.Id, false);
+                    ContainerSingleton.ScenarioRepository.EditScenario(scenario.Id, scenario.Name, path+scenario.Id, scenario.Access, scenario.Description);
+                    var outputFile = new StreamWriter(path + scenario.Id, false);
                     foreach(var a in scenario.ScriptFile)
                         outputFile.WriteLine(a);
+                    outputFile.Close();
                     return RedirectToAction("Index");
                 }
                 return View(scenario);

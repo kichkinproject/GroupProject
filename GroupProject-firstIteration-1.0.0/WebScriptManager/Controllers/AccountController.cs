@@ -132,7 +132,7 @@ namespace WebScriptManager.Controllers
 
             if (Session["returnUrl"] == null)
                 Session["returnUrl"] = "~/Home/Index";
-           Session["userId"] = null;
+            Session["userId"] = null;
 
             Session["role"] = null;
             

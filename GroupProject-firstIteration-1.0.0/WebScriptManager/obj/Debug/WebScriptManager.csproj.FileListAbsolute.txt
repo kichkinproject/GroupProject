@@ -51,7 +51,7 @@ C:\Users\artem\source\repos\WebScriptManager\WebScriptManager\bin\ru\System.Web.
 C:\Users\artem\source\repos\WebScriptManager\WebScriptManager\obj\Debug\WebScriptManager.csproj.CoreCompileInputs.cache
 C:\Users\artem\source\repos\WebScriptManager\WebScriptManager\obj\Debug\WebScriptManager.dll
 C:\Users\artem\source\repos\WebScriptManager\WebScriptManager\obj\Debug\WebScriptManager.pdb
-C:\Users\artem\source\repos\WebScriptManager\WebScriptManager\obj\Debug\WebScriptManager.csprojResolveAssemblyReference.cache
 C:\Users\artem\source\repos\WebScriptManager\WebScriptManager\bin\Node.dll
 C:\Users\artem\source\repos\WebScriptManager\WebScriptManager\bin\ru\EntityFramework.SqlServer.resources.dll
 C:\Users\artem\source\repos\WebScriptManager\WebScriptManager\obj\Debug\WebScriptManager.csproj.CopyComplete
+C:\Users\artem\source\repos\WebScriptManager\WebScriptManager\obj\Debug\WebScriptManager.csprojResolveAssemblyReference.cache
