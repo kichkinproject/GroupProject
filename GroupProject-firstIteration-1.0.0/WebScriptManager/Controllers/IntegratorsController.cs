@@ -52,9 +52,9 @@ namespace WebScriptManager.Controllers
         }
 
         [HttpPost]
-        public ActionResult Create([Bind(Include = "Login,Mail,Password,Phone,FIO")] Models.User user)
+        public ActionResult Create([Bind(Include = "Login,Mail,Password,Phone,FIO")] User user)
         {
-            user.UserGroup = new Models.UserGroup();
+            user.UserGroup = new UserGroup();
             try
             {
 

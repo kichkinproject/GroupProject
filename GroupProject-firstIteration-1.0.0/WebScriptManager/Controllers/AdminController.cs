@@ -104,6 +104,8 @@ namespace WebScriptManager.Controllers
         [HttpPost]
         public ActionResult Create([Bind(Include = "Login,Mail,Password,Phone,FIO")] Models.Admin user)
         {
+            if(Session["role"] as string != "Admin")
+                    return Redirect("~/Admin/Login");
             try
             {
 

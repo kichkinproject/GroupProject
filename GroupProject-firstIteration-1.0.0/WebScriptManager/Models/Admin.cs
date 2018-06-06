@@ -28,6 +28,7 @@ namespace WebScriptManager.Models
         [StringLength(50, MinimumLength =3, ErrorMessage ="Длинна должна быть от 3 до 50 символов")]
         [Display(Name = "Логин")]
         [Required(ErrorMessage = "Не допускает пустое значение")]
+        [RegularExpression("^(.*[<>].*)",ErrorMessage ="Введены не допустимые символы")]
         public string Login { get; set; }
 
 
@@ -35,14 +36,17 @@ namespace WebScriptManager.Models
         [StringLength(50, MinimumLength = 7, ErrorMessage = "Длинна должна быть от 7 до 50 символов")]
         [Required(ErrorMessage = "Не допускает пустое значение")]
         [Display(Name = "Пароль")]
+        [RegularExpression("^(.*[<>].*)", ErrorMessage = "Введены не допустимые символы")]
         public string Password { get; set; }
 
-        [RegularExpression(@"[A-ZА-Я][a-zа-я]* [A-ZА-Я][a-zа-я]* [A-ZА-Я][a-zа-я]*", ErrorMessage = "Не верно указано ФИО")]
+
+        [RegularExpression("^(.*[<>].*)", ErrorMessage = "Введены не допустимые символы")]
+        [StringLength(100, ErrorMessage = "Длинна строки не может превосходить 100")]
         [Required(ErrorMessage = "Не допускает пустое значение")]
-        [Display(Name = "Фамилия, имя и отчество")]
+        [Display(Name = "Фамилия, имя, отчество")]
         public string FIO { get; set; }
 
-        [RegularExpression(@"\+[2-9]-\d{3}-\d{3}-\d{4}$", ErrorMessage = "Формат номера : +X-XXX-XXX-XXXX")]
+        [RegularExpression(@"(\+[2-9]-\d{3}-\d{3}-\d{4}$)|(\+[2-9]-\d{3}-\d{3}-\d{2}-\d(2)$)", ErrorMessage = "Формат номера : +X-XXX-XXX-XXXX или +X-XXX-XXX-XX-XX")]
         [Required(ErrorMessage = "Не допускает пустое значение")]
         [Display(Name = "Номер телефона")]
         public string Phone { get; set; }

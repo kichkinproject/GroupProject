@@ -161,6 +161,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\IntegratorsController.cs" />
     <Compile Include="Controllers\ScenariosController.cs" />
+    <Compile Include="Controllers\UserGroupsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -340,6 +341,11 @@
     <Content Include="Views\Account\Edit.cshtml" />
     <Content Include="Views\Account\Delete.cshtml" />
     <Content Include="Views\Admin\Create.cshtml" />
+    <Content Include="Views\UserGroups\Create.cshtml" />
+    <Content Include="Views\UserGroups\Delete.cshtml" />
+    <Content Include="Views\UserGroups\Details.cshtml" />
+    <Content Include="Views\UserGroups\Edit.cshtml" />
+    <Content Include="Views\UserGroups\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
