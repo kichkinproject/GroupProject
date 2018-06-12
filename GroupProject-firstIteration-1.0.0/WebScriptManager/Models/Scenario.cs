@@ -29,17 +29,17 @@ namespace WebScriptManager.Models
 
         [StringLength(50, MinimumLength = 3, ErrorMessage = "Длинна должна быть от 3 до 50 символов")]
         [Required(ErrorMessage = "Не допускает пустое значение")]
-        [RegularExpression(@"^(.*[<>].*)", ErrorMessage = "Введены не допустимые символы")]
+        [RegularExpression(@"[A-Za-zа-яА-Я ,.!:;?]*", ErrorMessage = "Введены не допустимые символы")]
         [Display(Name = "Название")]
         public string Name { get; set; }
 
         [Display(Name = "Описание")]
-        [RegularExpression(@"^(.*[<>].*)", ErrorMessage = "Введены не допустимые символы")]
+        [RegularExpression(@"[A-Za-zа-яА-Я ,.!:;?\(\)\{\}]*", ErrorMessage = "Введены не допустимые символы")]
         [StringLength(255, ErrorMessage ="Длинна должна быть до 255 символов")]
         public string Description { get; set; }
 
 
-        [RegularExpression(@"^(.*[<>].*)", ErrorMessage = "Введены не допустимые символы")]
+        [RegularExpression(@"[A-Za-zа-яА-Я ,.!:;?\(\)\{\}]*", ErrorMessage = "Введены не допустимые символы")]
         [Required(ErrorMessage = "Не допускает пустое значение")]
         [StringLength(1000, ErrorMessage ="длинна не может превосходить 1000")]
         [Display(Name = "Адрес сценария")]

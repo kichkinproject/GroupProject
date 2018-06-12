@@ -27,7 +27,7 @@ namespace WebScriptManager.Models
         [HiddenInput(DisplayValue = false)]
         public long Id { get; set; }
 
-        [RegularExpression(@"^(.*[<>].*)", ErrorMessage = "Введены не допустимые символы")]
+        [RegularExpression(@"[a-zA-Zа-яА-Я ]*", ErrorMessage = "Введены не допустимые символы")]
         [StringLength(50, MinimumLength = 3, ErrorMessage = "Длинна должна быть от 3 до 50 символов")]
         [Required(ErrorMessage = "Не допускает пустое значение")]
         [Display(Name = "Название")]

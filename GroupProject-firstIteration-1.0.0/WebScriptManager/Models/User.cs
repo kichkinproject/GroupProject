@@ -27,19 +27,19 @@ namespace WebScriptManager.Models
 
         [StringLength(50, MinimumLength = 3, ErrorMessage = "Длинна должна быть от 3 до 50 символов")]
        
-        [RegularExpression(@"^(.*[<>].*)", ErrorMessage = "Введены не допустимые символы")]
+        [RegularExpression(@"[A-Za-z]*", ErrorMessage = "Введены не допустимые символы")]
         [Required(ErrorMessage = "Не допускает пустое значение")]
         [Display(Name = "Логин")]
         public string Login { get; set; }
 
         [DataType(DataType.Password)]
         [StringLength(50, MinimumLength = 7, ErrorMessage = "Длинна должна быть от 7 до 50 символов")]
-        [RegularExpression(@"^(.*[<>].*)", ErrorMessage = "Введены не допустимые символы")]
+        [RegularExpression(@"[A-Z0-9]*", ErrorMessage = "Введены не допустимые символы")]
         [Required(ErrorMessage = "Не допускает пустое значение")]
         [Display(Name = "Пароль")]
         public string Password { get; set; }
 
-        [RegularExpression("^(.*[<>].*)", ErrorMessage = "Введены не допустимые символы")]
+        [RegularExpression("[A-Za-zА-Яа-я -]*", ErrorMessage = "Введены не допустимые символы")]
         [StringLength(100, ErrorMessage ="Длинна строки не может превосходить 100")]
         [Required(ErrorMessage = "Не допускает пустое значение")]
         [Display(Name = "Фамилия, имя, отчество")]
