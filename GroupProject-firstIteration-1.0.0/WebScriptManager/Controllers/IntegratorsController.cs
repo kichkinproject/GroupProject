@@ -13,12 +13,54 @@ namespace WebScriptManager.Controllers
     public class IntegratorsController : Controller
     {
 
+        private bool IsAdmin()
+        {
+            return Session["role"] as string == "Admin" ? true : false;
+        }
+        private bool IsIntegrator()
+        {
+            return Session["role"] as string == "Integrator" ? true : false;
+        }
+        private bool IsLoggedIn()
+        {
+            if (Session["userId"] == null)
+            {
+                return false;
+            }
+            return true;
+        }
+        private bool IsParent(UserGroup parent, UserGroup son)
+        {
+            if (son == null)
+                return false;
+            if (son.Id == parent.Id)
+                return true;
+            else
+                return IsParent(parent, son.Parent);
+
+        }
+        private Int64 UserId()
+        {
+            return Convert.ToInt64(Session["userId"] as string);
+        }
+
         // GET: Integrators
         public ActionResult Index()
         {
             try
             {
-                //User user = ContainerSingleton.UserRepository[Int64.Parse(Session["userId"].ToString())];
+                if (this.IsIntegrator())
+                {
+                    UserGroup group = ContainerSingleton.UserGroupRepository[ContainerSingleton.UserRepository[Int64.Parse(Session["userId"].ToString())].UserGroup.Id];
+                    List<User> integrators = ContainerSingleton.UserRepository.Integrators.ToList();
+                    List<User> intInGr = new List<User>();
+                    foreach (var inte in integrators)
+                    {
+                        if (inte.UserGroup.Id == group.Id)
+                            intInGr.Add(inte);
+                    }
+                    return View(intInGr);
+                }
                 return View(ContainerSingleton.UserRepository.Integrators.ToList());
             }
             catch (Exception e)
@@ -46,22 +88,61 @@ namespace WebScriptManager.Controllers
             }
         }
 
+        [HttpGet]
         public ActionResult Create()
         {
+            List<SelectListItem> groupList = new List<SelectListItem>();
+            if (this.IsIntegrator())
+            {
+                User integr = ContainerSingleton.UserRepository[this.UserId()];
+                groupList.Add(new SelectListItem { Text = "В текущую группу", Value = "0" });
+                List<UserGroup> groups = ContainerSingleton.UserGroupRepository.GroupsInGroup(integr.UserGroup.Id).ToList();
+                int i = 1;
+                foreach(var gr in groups)
+                {
+                    groupList.Add(new SelectListItem { Text = gr.Name, Value = i.ToString() });
+                    i++;
+                }
+            }
+            ViewData["UserGroups"] = groupList;
             return View();
         }
 
         [HttpPost]
-        public ActionResult Create([Bind(Include = "Login,Mail,Password,Phone,FIO")] User user)
+        public ActionResult Create([Bind(Include = "Login,Mail,Password,Phone,FIO")] User user, string userGroups)
         {
-            user.UserGroup = new UserGroup();
+            //user.UserGroup = new UserGroup();
             try
             {
-
                 if (ModelState.IsValid && (from c in Models.ContainerSingleton.UserRepository.AllUsers where c.Login == user.Login || c.Mail == user.Mail select c).Count() == 0)
                 {
-                    var userGroup = Models.ContainerSingleton.UserGroupRepository.AddGroup(user.Login + " group", Models.Licence.None);
-                    Models.ContainerSingleton.UserRepository.AddUser(user.Login, user.Password, user.FIO, Models.UserType.Integrator, userGroup, user.Phone, user.Mail);
+                    if (this.IsIntegrator())
+                    {
+                        User integr = ContainerSingleton.UserRepository[this.UserId()];
+                        switch (userGroups)
+                        {
+                            case "0":
+                                ContainerSingleton.UserRepository.AddUser(user.Login, user.Password, user.FIO, UserType.Integrator, integr.UserGroup, user.Phone, user.Mail);
+                                break;
+                            default:
+                                List<UserGroup> groups = ContainerSingleton.UserGroupRepository.GroupsInGroup(integr.UserGroup.Id).ToList();
+                                int i = 1; 
+                                foreach(var g in groups)
+                                {
+                                    if (userGroups == i.ToString())
+                                    {
+                                        ContainerSingleton.UserRepository.AddUser(user.Login, user.Password, user.FIO, UserType.Integrator, g, user.Phone, user.Mail);
+                                        break;
+                                    }
+                                }
+                                break;
+                        }
+                        ModelState.AddModelError("", "Интегратор добавлен");
+                        return Redirect("~/Integrators/Index");
+                    }
+                    user.UserGroup = new UserGroup();
+                    var userGroup = Models.ContainerSingleton.UserGroupRepository.AddGroup(user.Login + " group", Licence.None);
+                    Models.ContainerSingleton.UserRepository.AddUser(user.Login, user.Password, user.FIO, UserType.Integrator, userGroup, user.Phone, user.Mail);
                     // HttpContext.Response.Cookies["userId"].Value = (from c in Models.ContainerSingleton.UserRepository.Users where c.Login == user.Login select c).First().Id.ToString();
                     //HttpContext.Response.Cookies["roles"].Value = "Integrator";
                     ModelState.AddModelError("", "Интегратор добавлен");
@@ -70,6 +151,20 @@ namespace WebScriptManager.Controllers
                 else
                 {
                     ModelState.AddModelError("", "Такой логин или Email уже заняты");
+                    List<SelectListItem> groupList = new List<SelectListItem>();
+                    if (this.IsIntegrator())
+                    {
+                        User integr = ContainerSingleton.UserRepository[this.UserId()];
+                        groupList.Add(new SelectListItem { Text = "В текущую группу", Value = "0" });
+                        List<UserGroup> groups = ContainerSingleton.UserGroupRepository.GroupsInGroup(integr.UserGroup.Id).ToList();
+                        int i = 1;
+                        foreach (var gr in groups)
+                        {
+                            groupList.Add(new SelectListItem { Text = gr.Name, Value = i.ToString() });
+                            i++;
+                        }
+                    }
+                    ViewData["UserGroups"] = groupList;
                     return View(user);
                 }
             }

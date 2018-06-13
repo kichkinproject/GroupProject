@@ -30,6 +30,20 @@ namespace WebScriptManager.Models.Repositories
             return current;
         }
         /// <summary>
+        /// Вычисление всех младших групп для передаваемой группы
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<UserGroup> GroupsInGroup(long id)
+        {
+            UserGroup group = this[id];
+            List<UserGroup> groups = group.Children.ToList();
+            foreach(var gr in groups)
+            {
+                groups.AddRange(this.GroupsInGroup(gr.Id).ToList());
+            }
+            return groups;
+        }
+        /// <summary>
         /// Возвращение коллекции групп пользователей, хранящихся в базе данных, отсортированных по имени
         /// </summary>
         /// <returns></returns>

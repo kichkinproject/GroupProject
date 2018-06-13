@@ -1,19 +1,15 @@
 ﻿@model WebScriptManager.Models.UserGroup
 
-@{
-    Layout = null;
-}
-
 <!DOCTYPE html>
 
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
-    <title>Details</title>
+    <title>Группа пользователей</title>
 </head>
 <body>
     <div>
-        <h4>UserGroup</h4>
+        <h2>Группа пользователей</h2>
         <hr />
         <dl class="dl-horizontal">
             <dt>
@@ -35,8 +31,8 @@
         </dl>
     </div>
     <p>
-        @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-        @Html.ActionLink("Back to List", "Index")
+        @Html.ActionLink("Редактировать", "Edit", new { id = Model.Id }) |
+        @Html.ActionLink("Группы пользователей", "Index")
     </p>
 </body>
 </html>
