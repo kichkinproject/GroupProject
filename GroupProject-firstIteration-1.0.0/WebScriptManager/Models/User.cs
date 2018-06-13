@@ -26,15 +26,15 @@ namespace WebScriptManager.Models
         public long Id { get; set; }
 
         [StringLength(50, MinimumLength = 3, ErrorMessage = "Длинна должна быть от 3 до 50 символов")]
-       
-        [RegularExpression(@"[A-Za-z]*", ErrorMessage = "Введены не допустимые символы")]
+
+        [RegularExpression("[A-Za-z0-9]*", ErrorMessage = "Введены не допустимые символы")]
         [Required(ErrorMessage = "Не допускает пустое значение")]
         [Display(Name = "Логин")]
         public string Login { get; set; }
 
         [DataType(DataType.Password)]
         [StringLength(50, MinimumLength = 7, ErrorMessage = "Длинна должна быть от 7 до 50 символов")]
-        [RegularExpression(@"[A-Z0-9]*", ErrorMessage = "Введены не допустимые символы")]
+        [RegularExpression("[A-Za-z0-9]*", ErrorMessage = "Введены не допустимые символы")]
         [Required(ErrorMessage = "Не допускает пустое значение")]
         [Display(Name = "Пароль")]
         public string Password { get; set; }
