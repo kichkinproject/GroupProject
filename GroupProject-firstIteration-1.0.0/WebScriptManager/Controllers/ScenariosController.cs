@@ -86,8 +86,7 @@ namespace WebScriptManager.Controllers
                     ContainerSingleton.ScenarioRepository.EditScenario(currentScenario.Id, scenario.Name, path + currentScenario.Id, scenario.Access, scenario.Description);
 
                     var outputFile = new StreamWriter(path + currentScenario.Id);
-                    foreach(var a in scenario.ScriptFile)
-                        outputFile.WriteLine(a);
+                    outputFile.WriteLine(scenario.ScriptFile);
                     outputFile.Close();
                     return RedirectToAction("Index");
                 }

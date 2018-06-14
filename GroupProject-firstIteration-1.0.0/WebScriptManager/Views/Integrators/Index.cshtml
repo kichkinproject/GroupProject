@@ -23,6 +23,9 @@
         <th>
             @Html.DisplayNameFor(model => model.Mail)
         </th>
+        <th>
+            @Html.DisplayNameFor(model => model.UserGroup.Name)
+        </th>
         <th></th>
     </tr>
 
@@ -40,6 +43,9 @@
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Mail)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.UserGroup.Name)
         </td>
         <td align="center">
             @Html.ActionLink("Просмотреть", "Details", new { id = item.Id })                

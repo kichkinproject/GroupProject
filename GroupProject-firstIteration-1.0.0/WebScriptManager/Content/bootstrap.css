@@ -160,11 +160,22 @@ legend {
 
 button,
 input,
-select,
 textarea {
   margin: 0;
   font-family: inherit;
   font-size: 100%;
+}
+
+select {
+    width: 250px;
+    height: 38px;
+    border-left: 0px;
+    border-bottom: 15px;
+    border: 2px solid #240303;
+    border-radius: 5px;
+    outline: none;
+    background: #f6f6f5;
+    color: #240303;
 }
 
 button,

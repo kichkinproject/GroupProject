@@ -101,13 +101,16 @@ namespace WebScriptManager.Controllers
             if (IsAdmin())
             {
                 var list = ContainerSingleton.UserGroupRepository.UserGroups().ToList();
-                list.Add(null);
-                return View(list);
+                var newlist = GetSelectedItemsList(list);
+                newlist.Add(new SelectListItem() { Text = "Новая группа", Value = "0" });
+                ViewData["UserGroups"] = newlist;
+                return View();
             }
             else if (IsIntegrator())
             {
                 var integrator = ContainerSingleton.UserRepository[UserId()];
-                return View(from c in ContainerSingleton.UserGroupRepository.UserGroups() where IsParent(integrator.UserGroup, c) select c);
+                ViewData["UserGroups"] = GetSelectedItemsList((from c in ContainerSingleton.UserGroupRepository.UserGroups() where IsParent(integrator.UserGroup, c) select c).ToList());
+                return View();
 
             }
             else return new Views.Shared.HtmlExceptionView("доступно только интеграторам или администраторам");
@@ -116,12 +119,26 @@ namespace WebScriptManager.Controllers
         // POST: UserGroups/Create
         // Чтобы защититься от атак чрезмерной передачи данных, включите определенные свойства, для которых следует установить привязку. Дополнительные 
         // сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
+        private List<SelectListItem> GetSelectedItemsList(List<UserGroup> input)
+        {
+            List<SelectListItem> groupList = new List<SelectListItem>();
+            foreach (var gr in input)
+            {
+                groupList.Add(new SelectListItem { Text = gr.Name, Value = gr.Id.ToString() });
+                //i++;
+            }
+            return groupList;
+        }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Name,Licence")] UserGroup userGroup)
+        public ActionResult Create([Bind(Include = "Id,Name,Licence")] UserGroup userGroup, string userGroups)
         {
             if (ModelState.IsValid)
             {
+                if (userGroups == "0")
+                    userGroup.Parent = null;
+                else
+                    userGroup.Parent = ContainerSingleton.UserGroupRepository[Int64.Parse(userGroups)];
                 if (!IsLoggedIn())
                     return Redirect("~/Account/Login");
 
@@ -204,14 +221,9 @@ namespace WebScriptManager.Controllers
                     }
                     else if (IsIntegrator())
                     {
-                        var integrator = ContainerSingleton.UserRepository[UserId()];
-                        if (IsParent(integrator.UserGroup, userGroup))
-                        {
                             ContainerSingleton.UserGroupRepository.EditGroup(userGroup.Id, userGroup.Name, userGroup.Licence);
                             return RedirectToAction("Index");
-                        }
-                        else
-                            return new Views.Shared.HtmlExceptionView("Не возможно создать группу с таким предком");
+
 
                     }
                     else return new Views.Shared.HtmlExceptionView("доступно только интеграторам или администраторам");

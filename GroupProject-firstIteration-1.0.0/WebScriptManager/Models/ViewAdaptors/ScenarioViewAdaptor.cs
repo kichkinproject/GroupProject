@@ -22,7 +22,7 @@ namespace WebScriptManager.Models.ViewAdaptors
             Name = input.Name;
             Id = input.Id;
             Description = input.Description;
-            ScriptFile = System.IO.File.ReadAllLines(Controllers.ScenariosController.path+Id);            
+            ScriptFile = File.ReadAllLines(Controllers.ScenariosController.path+Id).ToString();            
             Access = input.Access;
             LastUpdate = input.LastUpdate;
             Admin = input.Admin;
@@ -50,8 +50,8 @@ namespace WebScriptManager.Models.ViewAdaptors
 
         [Required(ErrorMessage = "Не допускает пустое значение")]
         [Display(Name = "Код сценария")]
-        [RegularExpression(@"[A-Za-zа-яА-Я ,.!:;?\(\)\{\}]*", ErrorMessage = "Введены не допустимые символы")]
-        public IEnumerable<string> ScriptFile { get; set; }
+        [RegularExpression(@"[A-Za-zа-яА-Я0-9 ,.!:;?\(\)\{\}]*", ErrorMessage = "Введены не допустимые символы")]
+        public string ScriptFile { get; set; }
 
         [Display(Name = "Доступ")]
         [Required(ErrorMessage = "Не допускает пустое значение")]

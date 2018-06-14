@@ -39,7 +39,7 @@ namespace WebScriptManager.Models
         public string Description { get; set; }
 
 
-        [RegularExpression(@"[A-Za-zа-яА-Я ,.!:;?\(\)\{\}\\]*", ErrorMessage = "Введены не допустимые символы")]
+        [RegularExpression(@"[A-Za-zа-яА-Я0-9 ,.!:;?\(\)\{\}\\]*", ErrorMessage = "Введены не допустимые символы")]
         [Required(ErrorMessage = "Не допускает пустое значение")]
         [StringLength(1000, ErrorMessage ="длинна не может превосходить 1000")]
         [Display(Name = "Адрес сценария")]

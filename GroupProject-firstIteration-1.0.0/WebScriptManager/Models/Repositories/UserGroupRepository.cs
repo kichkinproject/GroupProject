@@ -36,12 +36,14 @@ namespace WebScriptManager.Models.Repositories
         public IEnumerable<UserGroup> GroupsInGroup(long id)
         {
             UserGroup group = this[id];
-            List<UserGroup> groups = group.Children.ToList();
-            foreach(var gr in groups)
+            UserGroup[] groups = group.Children.ToArray();
+            UserGroup[] tryGroups = (UserGroup[])groups.Clone();
+            for(int i = 0; i < groups.Length; i++)
             {
-                groups.AddRange(this.GroupsInGroup(gr.Id).ToList());
+                tryGroups.Concat(this.GroupsInGroup(groups[i].Id).ToArray());
             }
-            return groups;
+            
+            return tryGroups;
         }
         /// <summary>
         /// Возвращение коллекции групп пользователей, хранящихся в базе данных, отсортированных по имени

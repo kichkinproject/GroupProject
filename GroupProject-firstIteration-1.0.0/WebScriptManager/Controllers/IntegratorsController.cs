@@ -51,15 +51,9 @@ namespace WebScriptManager.Controllers
             {
                 if (this.IsIntegrator())
                 {
-                    UserGroup group = ContainerSingleton.UserGroupRepository[ContainerSingleton.UserRepository[Int64.Parse(Session["userId"].ToString())].UserGroup.Id];
-                    List<User> integrators = ContainerSingleton.UserRepository.Integrators.ToList();
-                    List<User> intInGr = new List<User>();
-                    foreach (var inte in integrators)
-                    {
-                        if (inte.UserGroup.Id == group.Id)
-                            intInGr.Add(inte);
-                    }
-                    return View(intInGr);
+                    UserGroup userGroup = ContainerSingleton.UserRepository[Int64.Parse(Session["userId"].ToString())].UserGroup;
+                   
+                    return View(from c in ContainerSingleton.UserRepository.AllUsers where c.UserType==UserType.Integrator&& IsParent(userGroup, c.UserGroup) select c);
                 }
                 return View(ContainerSingleton.UserRepository.Integrators.ToList());
             }
@@ -95,13 +89,13 @@ namespace WebScriptManager.Controllers
             if (this.IsIntegrator())
             {
                 User integr = ContainerSingleton.UserRepository[this.UserId()];
-                groupList.Add(new SelectListItem { Text = "В текущую группу", Value = "0" });
-                List<UserGroup> groups = ContainerSingleton.UserGroupRepository.GroupsInGroup(integr.UserGroup.Id).ToList();
-                int i = 1;
+                //groupList.Add(new SelectListItem { Text = "В текущую группу", Value = "0" });
+                List<UserGroup> groups = (from c in ContainerSingleton.UserGroupRepository.UserGroups() where IsParent(integr.UserGroup, c) select c).ToList();
+                //int i = 1;
                 foreach(var gr in groups)
                 {
-                    groupList.Add(new SelectListItem { Text = gr.Name, Value = i.ToString() });
-                    i++;
+                    groupList.Add(new SelectListItem { Text = gr.Name, Value = gr.Id.ToString() });
+                    //i++;
                 }
             }
             ViewData["UserGroups"] = groupList;
@@ -125,16 +119,8 @@ namespace WebScriptManager.Controllers
                                 ContainerSingleton.UserRepository.AddUser(user.Login, user.Password, user.FIO, UserType.Integrator, integr.UserGroup, user.Phone, user.Mail);
                                 break;
                             default:
-                                List<UserGroup> groups = ContainerSingleton.UserGroupRepository.GroupsInGroup(integr.UserGroup.Id).ToList();
-                                int i = 1; 
-                                foreach(var g in groups)
-                                {
-                                    if (userGroups == i.ToString())
-                                    {
-                                        ContainerSingleton.UserRepository.AddUser(user.Login, user.Password, user.FIO, UserType.Integrator, g, user.Phone, user.Mail);
-                                        break;
-                                    }
-                                }
+                                //int i = 1; 
+                                ContainerSingleton.UserRepository.AddUser(user.Login, user.Password, user.FIO, UserType.Integrator, ContainerSingleton.UserGroupRepository[Int64.Parse(userGroups)], user.Phone, user.Mail);
                                 break;
                         }
                         ModelState.AddModelError("", "Интегратор добавлен");
@@ -156,7 +142,7 @@ namespace WebScriptManager.Controllers
                     {
                         User integr = ContainerSingleton.UserRepository[this.UserId()];
                         groupList.Add(new SelectListItem { Text = "В текущую группу", Value = "0" });
-                        List<UserGroup> groups = ContainerSingleton.UserGroupRepository.GroupsInGroup(integr.UserGroup.Id).ToList();
+                        List<UserGroup> groups = (from c in ContainerSingleton.UserGroupRepository.UserGroups() where IsParent(integr.UserGroup, c) select c).ToList();
                         int i = 1;
                         foreach (var gr in groups)
                         {

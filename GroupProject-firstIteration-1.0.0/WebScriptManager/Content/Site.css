@@ -1,27 +1,216 @@
-﻿body {
-    padding-top: 50px;
-    padding-bottom: 20px;
+﻿* {
+    box-sizing: border-box;
 }
 
-/* Set padding to keep content from hitting the edges */
-.body-content {
-    padding-left: 15px;
-    padding-right: 15px;
+body {
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 26px;
+    height: 100%;
+    background-image: url('../images/thisOne.jpg');
+    /*background-image: url('C:\Users\Artem Vetrov\Documents\Visual Studio 2013\Projects\WebVMAIS\WebVMAIS\images\dizayn_interera_ofisa132.jpg')*/
 }
 
-/* Override the default bootstrap behavior where horizontal description lists 
-   will truncate terms that are too long to fit in the left column 
-*/
-.dl-horizontal dt {
-    white-space: normal;
+nav {
+    background: white;
 }
 
-/* Set width on the form input elements since they're 100% wide by default */
-input,
+    nav ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    nav a {
+        text-decoration: none;
+        outline: none;
+        display: block;
+        transition: .4s ease-in-out;
+    }
+
+.topmenu {
+    text-align: center;
+    padding: 0;
+}
+
+    .topmenu > li {
+        display: inline-block;
+        position: relative;
+    }
+
+        .topmenu > li:after {
+            content: "";
+            position: absolute;
+            right: 0;
+            width: 1px;
+            height: 12px;
+            background: #d2d2d2;
+            top: 16px;
+            box-shadow: 4px -2px 0 #d2d2d2;
+            transform: rotate(30deg);
+        }
+
+        .topmenu > li:last-child:after {
+            background: none;
+            box-shadow: none;
+        }
+
+        .topmenu > li > a {
+            padding: 12px 26px;
+            color: #767676;
+            text-transform: uppercase;
+            font-weight: bold;
+            letter-spacing: 1px;
+            font-family: 'Exo 2', sans-serif;
+        }
+
+        .topmenu > li:hover > a {
+            color: #c0a97a;
+        }
+
+.submenu {
+    position: absolute;
+    left: 50%;
+    top: 100%;
+    width: 210px;
+    margin-left: -105px;
+    background: #fafafa;
+    border: 1px solid #ededed;
+    z-index: 5;
+    visibility: hidden;
+    opacity: 0;
+    transform: scale(.8);
+    transition: .4s ease-in-out;
+}
+
+    .submenu li a {
+        padding: 10px 0;
+        margin: 0 10px;
+        border-bottom: 1px solid #efefef;
+        font-size: 12px;
+        color: #484848;
+        font-family: 'Kurale', serif;
+    }
+
+.topmenu > li:hover .submenu {
+    visibility: visible;
+    opacity: 1;
+    transform: scale(1);
+}
+
+.submenu li a:hover {
+    color: #c0a97a;
+}
+
+div {
+    font-size: 16px;
+    font-family: 'Times New Roman', Times, serif;
+    color: darkslategray;
+    margin: 0;
+    border: 2px;
+    border-radius: 15px;
+}
+
+h2 {
+    font-size: 22px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    color: darkslategray;
+    margin: 150px 15px 10px;
+}
+
+h4 {
+    font-size: 18px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    color: darkslategray;
+    margin-left: 10px;
+}
+
+p {
+    font-size: 16px;
+    font-family: 'Times New Roman', Times, serif;
+    color: darkslategray;
+    margin: 0px 0px 0px 0px;
+}
+
 select {
-    max-width: 280px;
+    /*margin-left: 20px;*/
+    width: 250px;
+    height: 38px;
+    border-left: 0px;
+    border-bottom: 15px;
+    border: 2px solid #240303;
+    border-radius: 5px;
+    outline: none;
+    background: #f6f6f5;
+    color: #240303;
 }
+
 textarea {
-    height: 300px;
-    width: 800px;
+    width: 950px;
+    height: 450px;
+    font-size: 14px;
+    border-left: 0px;
+    border-bottom: 15px;
+    border: 2px solid #240303;
+    border-radius: 5px;
+    /*margin-left: 30px;
+    margin-bottom: 15px;*/
+    padding: 10px;
+}
+
+input {
+    width: 300px;
+    height: 37px;
+    margin: 0px;
+    border-left: 0px;
+    border-bottom: 15px;
+    border-radius: 5px;
+    color: darkslategray;
+    border: 2px solid #240303;
+}
+
+button {
+    background: #06e406;
+    width: 300px;
+    height: 37px;
+    margin: 0px 5px 5px 15px;
+    border-left: 0px;
+    border-bottom: 0px;
+    border-radius: 5px;
+    color: darkslategray;
+    box-shadow: 0 10px 5px 0 #059d33;
+}
+
+a {
+    max-width: 700px;
+    height: 37px;
+    margin: 20px 5px 5px 15px;
+    border-left: 25px;
+    color: blueviolet;
+    padding: 5px;
+}
+
+label {
+    font-size: 16px;
+    font-family: 'Times New Roman', Times, serif;
+    color: darkslategray;
+    margin: 0px 0px 0px 0px;
+}
+
+table {
+    font-size: 14px;
+    font-family: 'Times New Roman', Times, serif;
+    margin-bottom: 15px;
+    padding: 3px 5px 2px;
+}
+
+content {
+    box-sizing: border-box;
+    min-height: 100%;
+    padding-bottom: 90px;
+}
+
+footer {
+    height: 80px;
+    margin-top: 10px;
 }

@@ -36,6 +36,7 @@
             <div class="form-group">
                 @Html.Label("Родительская группа", htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
+                    @Html.DropDownList("userGroups", (IEnumerable<SelectListItem>)ViewData["UserGroups"], htmlAttributes: new { id = "userGroups", htmlAttributes = new { @class = "form-control" } })
                     @*Html.EnumDropDownListFor()*@
                 </div>
             </div>
