@@ -21,6 +21,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.Licence)
             </th>
+            <th>
+                @Html.Label("Родительская группа")
+            </th>
             <th></th>
         </tr>
 
@@ -32,6 +35,14 @@
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Licence)
+                </td>
+                <td>
+                    @{ 
+                        if (item.Parent != null)
+                        {
+                           @Html.DisplayFor(modelItem => item.Parent.Name);
+                        }
+                    }
                 </td>
                 <td>
                     @Html.ActionLink("Редактировать", "Edit", new { id = item.Id }) |

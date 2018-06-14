@@ -15,19 +15,38 @@
             <dt>
                 @Html.DisplayNameFor(model => model.Name)
             </dt>
-    
+
             <dd>
                 @Html.DisplayFor(model => model.Name)
             </dd>
-    
+
             <dt>
                 @Html.DisplayNameFor(model => model.Licence)
             </dt>
-    
+
             <dd>
                 @Html.DisplayFor(model => model.Licence)
             </dd>
-    
+
+            <dt>
+                @{ 
+                    if (Model.Parent != null)
+                    {
+                        @Html.Label("Родительская группа");
+                    }
+                }
+            </dt>
+
+            <dd>
+                @{ 
+                    if (Model.Parent != null)
+                    {
+                        @Html.DisplayFor(model => model.Parent.Name)
+                    }
+                }
+                
+            </dd>
+
         </dl>
     </div>
     <p>

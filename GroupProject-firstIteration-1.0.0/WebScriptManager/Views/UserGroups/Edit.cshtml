@@ -11,7 +11,7 @@
     @using (Html.BeginForm())
     {
         @Html.AntiForgeryToken()
-        
+
         <div class="form-horizontal">
             <h2>Группа пользователей</h2>
             <hr />
@@ -34,6 +34,23 @@
                 </div>
             </div>
     
+            <div class="form-group">
+                @{
+                    if (Model.Parent != null)
+                    {
+                        @Html.LabelFor(model => model.Parent.Name,"Родительская группа", htmlAttributes: new { @class = "control-label col-md-2" });
+                    }
+                }
+                <div class="col-md-10">
+                    @{ 
+                        if (Model.Parent != null)
+                        {
+                           @Html.DisplayFor(model => model.Parent.Name, "form-control");
+                        }
+                    }
+                </div>
+            </div>
+
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">
                     <input type="submit" value="Сохранить" class="btn btn-default" />
